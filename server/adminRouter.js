@@ -9,10 +9,10 @@ let { categoryModel } = require("./adminModels");
 
 // 添加分类
 router.post("/categories", async (req, res) => {
-  let { name } = req.body;
+  let { name, parent } = req.body;
   let result;
   try {
-    result = await categoryModel.create({ name });
+    result = await categoryModel.create({ name, parent });
   } catch (error) {
     return res.json({
       code: -1,
@@ -34,7 +34,7 @@ router.get("/categories", async (req, res) => {
   let result;
   if (!_id) {
     //查询所有
-    result = await categoryModel.find();
+    result = await categoryModel.find().populate("parent");     //populate表示把某个字段关联的数据提取过来！！
   } else {
     //查询某一分类
     result = await categoryModel.findById(_id);
@@ -49,8 +49,8 @@ router.get("/categories", async (req, res) => {
 
 // 修改分类
 router.put("/categories", async (req, res) => {
-  let { _id, name } = req.body;
-  let result = await categoryModel.findByIdAndUpdate(_id, { name });
+  let { _id, name, parent } = req.body;
+  let result = await categoryModel.findByIdAndUpdate(_id, { name, parent });
   // 响应
   res.json({
     code: 0,
