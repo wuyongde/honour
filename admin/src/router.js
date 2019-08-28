@@ -25,6 +25,11 @@ export default new Router({
       children: [
         {
           path: "/categories/edit",
+          name: "categoriesAdd",
+          component: CategoriesEdit
+        },
+        {
+          path: "/categories/edit/:_id",
           name: "categoriesEdit",
           component: CategoriesEdit
         },
