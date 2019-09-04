@@ -16,9 +16,9 @@ app.use(bodyParser.json())
 
 
 
-// 引入admin路由
-let adminRouter=require('./adminRouter')
-app.use('/admin/api',adminRouter)
+// 引入categories相关路由
+let categoriesRouter=require('./routers/admin/categoriesRouter')
+app.use('/admin/api/categories',categoriesRouter)
 
 
 
