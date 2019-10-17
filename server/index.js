@@ -20,6 +20,10 @@ app.use(bodyParser.json())
 let categoriesRouter=require('./routers/admin/categoriesRouter')
 app.use('/admin/api/categories',categoriesRouter)
 
+// 引入goods相关路由
+let goodsRouter=require('./routers/admin/goodsRouter')
+app.use('/admin/api/goods',goodsRouter)
+
 
 
 app.listen(3000, () => {

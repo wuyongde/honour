@@ -8,7 +8,7 @@
         </el-select>
       </el-form-item>
       <el-form-item label="名称">
-        <el-input placeholder="输入分类名称" v-model="category.name" @focus="isShowAlert=false"></el-input>
+        <el-input placeholder="输入分类名称" v-model="category.name" @focus="isShowAlert=false" @keyup.native.enter="add"></el-input>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click.prevent="add">提交</el-button>

@@ -1,16 +1,16 @@
 <template>
-  <div class="CategoriesList">
-    <h1>分类列表</h1>
-    <el-table :data="categories" style="width: 100%" stripe fit>
+  <div class="GoodsList">
+    <h1>物品列表</h1>
+    <el-table :data="goods" style="width: 100%" stripe fit>
       <el-table-column prop="_id" label="_id" style="width:220px;"></el-table-column>
-      <el-table-column prop="parent.name" label="父类"></el-table-column>
+      <el-table-column prop="icon" label="图标"></el-table-column>
       <el-table-column prop="name" label="名称"></el-table-column>
       <el-table-column fixed="right" label="操作" width="200">
         <template slot-scope="scope">
           <el-button
             type="primary"
             size="small"
-            @click="$router.push(`/categories/edit/${scope.row._id}`)"
+            @click="$router.push(`/goods/edit/${scope.row._id}`)"
           >编辑</el-button>
           <el-button type="primary" size="small" @click="del(scope.row)">删除</el-button>
         </template>
@@ -20,16 +20,16 @@
 </template>
 <script>
 export default {
-  name: "CategoriesList",
+  name: "GoodsList",
   data() {
     return {
-      categories: []
+      goods: []
     };
   },
   methods: {
-    async getCategories() {
-      let res = await this.$http.get("/categories");
-      this.categories = res.data.data;
+    async getgoods() {
+      let res = await this.$http.get("/goods");
+      this.goods = res.data.data;
     },
     del(row) {
       // 弹框确认是否删除
@@ -40,7 +40,7 @@ export default {
       })
         .then(async () => {
           // 确认要删除，发ajax请求
-          let res = await this.$http.delete(`/categories?_id=${row._id}`);
+          let res = await this.$http.delete(`/goods?_id=${row._id}`);
           if (res.data.code === 0) {
             //删除成功
             this.$message({
@@ -48,7 +48,7 @@ export default {
               message: "删除成功!"
             });
             // 重新获取数据，刷新页面
-            this.getCategories();
+            this.getgoods();
           }
         })
         .catch(() => {
@@ -61,7 +61,7 @@ export default {
     }
   },
   created() {
-    this.getCategories();
+    this.getgoods();
   }
 };
 </script>

@@ -7,6 +7,10 @@ import Main from "./views/Main";
 import CategoriesList from "./views/categories/CategoriesList";
 import CategoriesEdit from "./views/categories/CategoriesEdit";
 
+// 引入物品组件
+import GoodsList from "./views/goods/GoodsList";
+import GoodsEdit from "./views/goods/GoodsEdit";
+
 // 启用路由
 Vue.use(Router);
 
@@ -37,7 +41,22 @@ export default new Router({
           path: "/categories/list",
           name: "categoriesList",
           component: CategoriesList
-        }
+        },
+        {
+          path: "/goods/edit",
+          name: "goodsAdd",
+          component: GoodsEdit
+        },
+        {
+          path: "/goods/edit/:_id",
+          name: "goodsEdit",
+          component: GoodsEdit
+        },
+        {
+          path: "/goods/list",
+          name: "goodsList",
+          component: GoodsList
+        },
       ]
     }
   ]
