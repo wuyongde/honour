@@ -1,5 +1,6 @@
 // 入口js
 const express = require("express");
+const path=require('path')
 const app = express();
 
 
@@ -14,6 +15,8 @@ app.use(bodyParser.urlencoded({ extended: false }))
 // parse application/json
 app.use(bodyParser.json())
 
+// 开放静态资源
+app.use('/admin/api/uploads',express.static(path.join(__dirname,'./uploads/')))
 
 
 // 引入categories相关路由
@@ -24,6 +27,9 @@ app.use('/admin/api/categories',categoriesRouter)
 let goodsRouter=require('./routers/admin/goodsRouter')
 app.use('/admin/api/goods',goodsRouter)
 
+// 引入文件上传路由
+let fileUploadRouter=require('./routers/admin/fileUploadRouter')
+app.use('/admin/api/uploads',fileUploadRouter)
 
 
 app.listen(3000, () => {

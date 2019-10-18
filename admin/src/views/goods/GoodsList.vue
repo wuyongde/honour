@@ -3,7 +3,11 @@
     <h1>物品列表</h1>
     <el-table :data="goods" style="width: 100%" stripe fit>
       <el-table-column prop="_id" label="_id" style="width:220px;"></el-table-column>
-      <el-table-column prop="icon" label="图标"></el-table-column>
+      <el-table-column label="图标">
+        <template slot-scope="scope">
+          <img :src="scope.row.icon" alt="" style="height:50px;width:50px;border-radius:5px;">
+        </template>
+      </el-table-column>
       <el-table-column prop="name" label="名称"></el-table-column>
       <el-table-column fixed="right" label="操作" width="200">
         <template slot-scope="scope">
