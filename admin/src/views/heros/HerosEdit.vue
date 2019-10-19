@@ -339,10 +339,13 @@ export default {
   justify-content: flex-start;
   flex-wrap: wrap;
   align-content: flex-start;
+  margin-top: 20px;
   &>div{
     margin-right: 50px;
     margin-bottom: 30px;
     width: 400px;
+    border: 1px solid #eee;
+    padding: 10px;
   }
 }
 </style>

@@ -35,6 +35,10 @@ app.use('/admin/api/uploads',fileUploadRouter)
 let herosRouter=require('./routers/admin/herosRouter')
 app.use('/admin/api/heros',herosRouter)
 
+// 引入articles相关路由
+let articlesRouter=require('./routers/admin/articlesRouter')
+app.use('/admin/api/articles',articlesRouter)
+
 
 app.listen(3000, () => {
   console.log("http://localhost:3000");

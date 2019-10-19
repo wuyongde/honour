@@ -15,6 +15,11 @@ import GoodsEdit from "./views/goods/GoodsEdit";
 import HerosList from "./views/heros/HerosList";
 import HerosEdit from "./views/heros/HerosEdit";
 
+// 引入文章组件
+import ArticlesList from "./views/articles/ArticlesList";
+import ArticlesEdit from "./views/articles/ArticlesEdit";
+
+
 // 启用路由
 Vue.use(Router);
 
@@ -78,6 +83,22 @@ export default new Router({
           path: "/heros/list",
           name: "herosList",
           component: HerosList
+        },
+         // 文章管理相关路由项
+         {
+          path: "/articles/edit",
+          name: "articlesAdd",
+          component: ArticlesEdit
+        },
+        {
+          path: "/articles/edit/:_id",
+          name: "articlesEdit",
+          component: ArticlesEdit
+        },
+        {
+          path: "/articles/list",
+          name: "articlesList",
+          component: ArticlesList
         },
       ]
     }
