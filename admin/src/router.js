@@ -11,6 +11,10 @@ import CategoriesEdit from "./views/categories/CategoriesEdit";
 import GoodsList from "./views/goods/GoodsList";
 import GoodsEdit from "./views/goods/GoodsEdit";
 
+// 引入英雄组件
+import HerosList from "./views/heros/HerosList";
+import HerosEdit from "./views/heros/HerosEdit";
+
 // 启用路由
 Vue.use(Router);
 
@@ -27,6 +31,7 @@ export default new Router({
       name: "main",
       component: Main,
       children: [
+        // 分类管理相关路由项
         {
           path: "/categories/edit",
           name: "categoriesAdd",
@@ -42,6 +47,7 @@ export default new Router({
           name: "categoriesList",
           component: CategoriesList
         },
+        // 物品管理相关路由项
         {
           path: "/goods/edit",
           name: "goodsAdd",
@@ -56,6 +62,22 @@ export default new Router({
           path: "/goods/list",
           name: "goodsList",
           component: GoodsList
+        },
+        // 英雄管理相关路由项
+        {
+          path: "/heros/edit",
+          name: "herosAdd",
+          component: HerosEdit
+        },
+        {
+          path: "/heros/edit/:_id",
+          name: "herosEdit",
+          component: HerosEdit
+        },
+        {
+          path: "/heros/list",
+          name: "herosList",
+          component: HerosList
         },
       ]
     }
