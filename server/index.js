@@ -39,6 +39,10 @@ app.use('/admin/api/heros',herosRouter)
 let articlesRouter=require('./routers/admin/articlesRouter')
 app.use('/admin/api/articles',articlesRouter)
 
+// 引入adverts相关路由
+let advertsRouter=require('./routers/admin/advertsRouter')
+app.use('/admin/api/adverts',advertsRouter)
+
 
 app.listen(3000, () => {
   console.log("http://localhost:3000");

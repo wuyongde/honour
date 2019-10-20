@@ -19,6 +19,11 @@ import HerosEdit from "./views/heros/HerosEdit";
 import ArticlesList from "./views/articles/ArticlesList";
 import ArticlesEdit from "./views/articles/ArticlesEdit";
 
+// 引入广告位组件
+import AdvertsList from "./views/adverts/AdvertsList";
+import AdvertsEdit from "./views/adverts/AdvertsEdit";
+
+
 
 // 启用路由
 Vue.use(Router);
@@ -100,6 +105,22 @@ export default new Router({
           name: "articlesList",
           component: ArticlesList
         },
+          // 广告位管理相关路由项
+          {
+            path: "/adverts/edit",
+            name: "advertsAdd",
+            component: AdvertsEdit
+          },
+          {
+            path: "/adverts/edit/:_id",
+            name: "advertsEdit",
+            component: AdvertsEdit
+          },
+          {
+            path: "/adverts/list",
+            name: "advertsList",
+            component: AdvertsList
+          },
       ]
     }
   ]
