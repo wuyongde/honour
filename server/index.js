@@ -43,6 +43,14 @@ app.use('/admin/api/articles',articlesRouter)
 let advertsRouter=require('./routers/admin/advertsRouter')
 app.use('/admin/api/adverts',advertsRouter)
 
+// 引入adminUsers相关路由
+let adminUsersRouter=require('./routers/admin/adminUsersRouter')
+app.use('/admin/api/adminUsers',adminUsersRouter)
+
+// 引入login相关路由
+let loginRouter=require('./routers/admin/loginRouter')
+app.use('/admin/api/login',loginRouter)
+
 
 app.listen(3000, () => {
   console.log("http://localhost:3000");

@@ -23,6 +23,12 @@ import ArticlesEdit from "./views/articles/ArticlesEdit";
 import AdvertsList from "./views/adverts/AdvertsList";
 import AdvertsEdit from "./views/adverts/AdvertsEdit";
 
+// 引入管理员组件
+import AdminUsersList from "./views/adminUsers/AdminUsersList";
+import AdminUsersEdit from "./views/adminUsers/AdminUsersEdit";
+
+// 引入用户登录组件
+import Login from './views/login/Login'
 
 
 // 启用路由
@@ -32,6 +38,11 @@ export default new Router({
   mode: "history",
   base: process.env.BASE_URL,
   routes: [
+    {
+      path:'/Login',
+      name:'Login',
+      component:Login
+    },
     {
       path: "/",
       redirect: "/main"
@@ -121,6 +132,22 @@ export default new Router({
             name: "advertsList",
             component: AdvertsList
           },
+            // 管理员管理相关路由项
+            {
+              path: "/adminUsers/edit",
+              name: "adminUsersAdd",
+              component: AdminUsersEdit
+            },
+            {
+              path: "/adminUsers/edit/:_id",
+              name: "adminUsersEdit",
+              component: AdminUsersEdit
+            },
+            {
+              path: "/adminUsers/list",
+              name: "adminUsersList",
+              component: AdminUsersList
+            },
       ]
     }
   ]

@@ -34,6 +34,16 @@
             </el-menu-item-group>  
           </el-submenu>
          
+         <el-submenu index="2">
+            <template slot="title">
+              <i class="el-icon-message"></i>系统管理
+            </template>
+            <el-menu-item-group>
+              <template slot="title">管理员管理</template>
+              <el-menu-item index="/adminUsers/edit">新建管理员</el-menu-item>
+              <el-menu-item index="/adminUsers/list">管理员列表</el-menu-item>
+            </el-menu-item-group>          
+          </el-submenu>
         </el-menu>
       </el-aside>
 
