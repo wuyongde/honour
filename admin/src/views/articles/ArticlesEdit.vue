@@ -121,7 +121,7 @@ export default {
   },
   created() {
     //在组件的created阶段
-    this.getCategories();
+    this.getCategories();     //获取文章分类列表
     this.$route.params._id && this.getarticleById(); //当路径参数中有_id时，才执行获取数据操作
   }
 };

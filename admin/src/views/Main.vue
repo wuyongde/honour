@@ -52,9 +52,9 @@
           <el-dropdown>
             <i class="el-icon-setting" style="margin-right: 15px"></i>
             <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item>查看</el-dropdown-item>
-              <el-dropdown-item>新增</el-dropdown-item>
-              <el-dropdown-item>删除</el-dropdown-item>
+              <!-- <el-dropdown-item>查看</el-dropdown-item>
+              <el-dropdown-item>新增</el-dropdown-item> -->
+              <el-dropdown-item @click.native.prevent="logout">注销</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
           <span>王小虎</span>
@@ -80,7 +80,19 @@ export default {
     return {
       tableData: Array(20).fill(item)     //批量生成数组元素---测试用
     };
-  }
+  },
+  methods: {
+    // 注销登录
+    logout(){
+      // 清除token并重定向到登录页
+      localStorage.setItem('token','')
+      this.$message({
+        type:'success',
+        message:'已注销'
+      })
+      this.$router.push('/Login')
+    }
+  },
 };
 </script>
 

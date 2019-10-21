@@ -43,7 +43,7 @@ export default new Router({
       name:'Login',
       component:Login,
       meta:{
-        isPublic:true
+        isPublic:true       //定义此路由页面是可以公开访问，而无需校验token的
       }
     },
     {

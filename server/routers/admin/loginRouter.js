@@ -5,17 +5,26 @@ let router = express.Router();
 // 引入adminUsers数据模型
 let adminUsersModel = require("../../models/adminUsersModel");
 
+// 引http-assert
+let assert = require('http-assert')
+
 // 用户登录验证
 router.post("/", async (req, res) => {
   let { username, password } = req.body;
   // 验证用户名是否存在
   let result = await adminUsersModel.findOne({ username });
+
+//   assert(result,422,'用户名不存在')
+
   if (!result) {
     //用户不存在
     return res.status(422).send({
       msg: "用户名不存在"
     });
   }
+
+
+
   // 验证密码是否正确
   let isValid = require("bcrypt").compareSync(password, result.password);
   if (!isValid) {

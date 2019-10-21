@@ -8,7 +8,7 @@
       <el-form-item label="图标">
         <el-upload
           class="avatar-uploader"
-          :action="$http.defaults.baseURL + '/uploads'"
+          :action="fileUploadAction"
           :show-file-list="false"
           :on-success="afterUpload"
           :on-error="errorUpload"
@@ -38,11 +38,6 @@ export default {
       isShowAlert: false,
       alertMsg: ""
     };
-  },
-  computed: {
-    addHeaders() {
-      return { Authorization: localStorage.getItem("token") };
-    }
   },
   methods: {
     // 图片上传成功后的操作
