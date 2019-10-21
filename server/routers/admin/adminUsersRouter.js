@@ -6,7 +6,7 @@ const router = express.Router();
 let adminUsersModel = require("../../models/adminUsersModel");
 
 // 添加管理员
-router.post("/", async (req, res) => {
+router.post("/",async (req, res) => {
   let { username, password } = req.body;
   let result;
   try {
@@ -26,7 +26,7 @@ router.post("/", async (req, res) => {
 });
 
 // 查询管理员
-router.get("/", async (req, res) => {
+router.get("/",async (req, res) => {
   // 判断：是查询所有还是查询某一个管理员
   let { _id } = req.query;
   let result;
@@ -46,7 +46,7 @@ router.get("/", async (req, res) => {
 });
 
 // 修改管理员
-router.put("/", async (req, res) => {
+router.put("/",async (req, res) => {
   let { _id, username, password } = req.body;
   let result = await adminUsersModel.findByIdAndUpdate(_id, { username, password });
   // 响应
@@ -58,7 +58,7 @@ router.put("/", async (req, res) => {
 });
 
 // 删除管理员
-router.delete("/", async (req, res) => {
+router.delete("/",async (req, res) => {
   let { _id } = req.query;
   let result = await adminUsersModel.findByIdAndRemove(_id);
   // 响应

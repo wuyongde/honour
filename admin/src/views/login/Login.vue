@@ -31,7 +31,13 @@ export default {
     async login() {
       //   用户登录
       let res = await this.$http.post("/login", this.model);
-      console.log(res.data);
+      localStorage.setItem('token',res.data.token)      //把token存起来
+    //   登录成功后跳转
+    this.$router.push('/')
+    this.$message({
+        type:'success',
+        message:'登录成功！'
+    })
     }
   }
 };

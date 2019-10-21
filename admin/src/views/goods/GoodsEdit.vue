@@ -8,9 +8,11 @@
       <el-form-item label="图标">
         <el-upload
           class="avatar-uploader"
-          :action="$http.defaults.baseURL + '/uploads'"     
+          :action="$http.defaults.baseURL + '/uploads'"
           :show-file-list="false"
           :on-success="afterUpload"
+          :on-error="errorUpload"
+          :headers="addHeaders"
         >
           <img v-if="good.icon" :src="good.icon" class="avatar" />
           <i v-else class="el-icon-plus avatar-uploader-icon"></i>
@@ -37,10 +39,27 @@ export default {
       alertMsg: ""
     };
   },
+  computed: {
+    addHeaders() {
+      return { Authorization: localStorage.getItem("token") };
+    }
+  },
   methods: {
     // 图片上传成功后的操作
-    afterUpload(res){   //res是文件上传成功后服务端的返回数据
-      this.good.icon=res.imgUrl
+    afterUpload(res) {
+      //res是文件上传成功后服务端的返回数据
+      this.good.icon = res.imgUrl;
+    },
+    // 文件上传失败的操作
+    errorUpload(err) {
+      // 判断：如果返回的状态码为401，说明是token校验失败，则跳转到登录页
+      if (err.status === 401) {
+        this.$message({
+          type:'error',
+          message:'token校验失败，请重新登录'
+        })
+        this.$router.push("/Login");
+      }
     },
 
     // 添加物品
@@ -98,8 +117,9 @@ export default {
       this.good = res.data.data;
     }
   },
-  created() {     //在组件的created阶段
-   this.$route.params._id && this.getgoodById();     //当路径参数中有_id时，才执行获取数据操作
+  created() {
+    //在组件的created阶段
+    this.$route.params._id && this.getgoodById(); //当路径参数中有_id时，才执行获取数据操作
   }
 };
 </script>

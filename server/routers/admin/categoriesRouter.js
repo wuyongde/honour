@@ -26,24 +26,27 @@ router.post("/", async (req, res) => {
 });
 
 // 查询分类
-router.get("/", async (req, res) => {
-  // 判断：是查询所有还是查询某一个分类
-  let { _id } = req.query;
-  let result;
-  if (!_id) {
-    //查询所有
-    result = await categoriesModel.find().populate("parent"); //populate表示把某个字段关联的数据提取过来！！
-  } else {
-    //查询某一分类
-    result = await categoriesModel.findById(_id);
+router.get(
+  "/",       //加入token校验的中间件
+  async (req, res) => {
+    // 判断：是查询所有还是查询某一个分类
+    let { _id } = req.query;
+    let result;
+    if (!_id) {
+      //查询所有
+      result = await categoriesModel.find().populate("parent"); //populate表示把某个字段关联的数据提取过来！！
+    } else {
+      //查询某一分类
+      result = await categoriesModel.findById(_id);
+    }
+    // 响应
+    res.json({
+      code: 0,
+      msg: "查询成功",
+      data: result
+    });
   }
-  // 响应
-  res.json({
-    code: 0,
-    msg: "查询成功",
-    data: result
-  });
-});
+);
 
 // 修改分类
 router.put("/", async (req, res) => {
