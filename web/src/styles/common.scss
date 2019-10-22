@@ -1,0 +1,139 @@
+// 全局通用样式
+
+// 变量：颜色相关
+$colors: (
+  "primary": #db9e3f,
+  "white": #fff,
+  "light": #eee,
+  "grey": #999,
+  "dark-1": #333,
+  "dark": #222,
+  "black": #000
+);
+
+// 颜色相关工具类：
+@each $colorKey, $color in $colors {
+  // 文本颜色
+  .text-#{$colorKey} {
+    color: $color;
+  }
+  // 背景颜色
+  .bg-#{$colorKey} {
+    background-color: $color;
+  }
+}
+
+// 文本对齐工具类：
+@each $var in (left, center, right) {
+  .text-#{$var} {
+    text-align: $var;
+  }
+}
+
+// 文本大小工具类：
+$base-font-size: 1rem; //变量：基本字体
+$font-size: (
+  //变量：字体大小
+    "xs": 0.7692,
+  "sm": 0.9231,
+  "md": 1,
+  "lg": 1.0769,
+  "xl": 1.2308
+);
+@each $key, $val in $font-size {
+  .text-#{$key} {
+    font-size: $base-font-size * $val;
+  }
+}
+
+// flex工具类：
+.d-flex {
+  display: flex;
+}
+.flex-column {
+  //纵向排列
+  flex-direction: column;
+}
+.flex-1 {
+  //自动增长
+  flex: 1;
+}
+$flex-jc: (
+  //jc表示justify-content：主轴对齐方式
+    "start": flex-start,
+  "end": flex-end,
+  "center": center,
+  "around": space-around,
+  "between": space-between
+);
+@each $key, $val in $flex-jc {
+  //主轴对齐方式工具类
+  .flex-jc-#{$key} {
+    justify-content: $val;
+  }
+}
+$flex-ai: (
+  //ai表示align-items：辅轴对齐方式
+    "start": flex-start,
+  "end": flex-end,
+  "center": center,
+  "stretch": stretch
+);
+@each $key, $val in $flex-ai {
+  //辅轴对齐方式工具类
+  .flex-ai-#{$key} {
+    align-items: $val;
+  }
+}
+
+// 边距工具类：
+$space-types: (
+  "m": margin,
+  "p": padding
+);
+$space-directions: (
+  "t": top,
+  "b": bottom,
+  "l": left,
+  "r": right
+);
+$space-size-base: 1rem;
+$space-sizes: (
+  "0": 0,
+  "1": 0.25,
+  "2": 0.5,
+  "3": 1,
+  "4": 2,
+  "5": 5
+);
+// 循环
+@each $typesKey, $type in $space-types {
+  @each $sizesKey, $size in $space-sizes {
+    // m-3,p-1...
+    .#{$typesKey}-#{$sizesKey} {
+      #{$type}: $size * $space-size-base;
+    }
+    // mx-1,py-3...
+    .#{$typesKey}x-#{$sizesKey} {
+      #{$type}-left: $size * $space-size-base;
+      #{$type}-right: $size * $space-size-base;
+    }
+    .#{$typesKey}y-#{$sizesKey} {
+      #{$type}-bottom: $size * $space-size-base;
+      #{$type}-top: $size * $space-size-base;
+    }
+  }
+
+  //mt-1,pb-2...
+  @each $directionsKey, $direction in $space-directions {
+    @each $sizesKey, $size in $space-sizes {
+      .#{$typesKey}#{$directionsKey}-#{$sizesKey} {
+        #{$type}-#{$direction}: $size * $space-size-base;
+      }
+    }
+  }
+}
+
+// .aa{
+//     padding: ;: 13px;
+// }

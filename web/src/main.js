@@ -2,7 +2,12 @@ import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
 import store from './store'
-import './plugins/element.js'
+
+// 引入通用样式
+import './styles/reset.scss'
+import './styles/common.scss'
+
+
 
 Vue.config.productionTip = false
 
