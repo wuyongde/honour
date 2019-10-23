@@ -1,15 +1,7 @@
 // 全局通用样式
 
-// 变量：颜色相关
-$colors: (
-  "primary": #db9e3f,
-  "white": #fff,
-  "light": #eee,
-  "grey": #999,
-  "dark-1": #333,
-  "dark": #222,
-  "black": #000
-);
+// 引入变量
+@import "./_variables";
 
 // 颜色相关工具类：
 @each $colorKey, $color in $colors {
@@ -31,15 +23,7 @@ $colors: (
 }
 
 // 文本大小工具类：
-$base-font-size: 1rem; //变量：基本字体
-$font-size: (
-  //变量：字体大小
-    "xs": 0.7692,
-  "sm": 0.9231,
-  "md": 1,
-  "lg": 1.0769,
-  "xl": 1.2308
-);
+
 @each $key, $val in $font-size {
   .text-#{$key} {
     font-size: $base-font-size * $val;
@@ -54,31 +38,22 @@ $font-size: (
   //纵向排列
   flex-direction: column;
 }
+.flex-wrap {
+  // 换行
+  flex-wrap: wrap;
+}
 .flex-1 {
   //自动增长
   flex: 1;
 }
-$flex-jc: (
-  //jc表示justify-content：主轴对齐方式
-    "start": flex-start,
-  "end": flex-end,
-  "center": center,
-  "around": space-around,
-  "between": space-between
-);
+
 @each $key, $val in $flex-jc {
   //主轴对齐方式工具类
   .flex-jc-#{$key} {
     justify-content: $val;
   }
 }
-$flex-ai: (
-  //ai表示align-items：辅轴对齐方式
-    "start": flex-start,
-  "end": flex-end,
-  "center": center,
-  "stretch": stretch
-);
+
 @each $key, $val in $flex-ai {
   //辅轴对齐方式工具类
   .flex-ai-#{$key} {
@@ -86,26 +61,6 @@ $flex-ai: (
   }
 }
 
-// 边距工具类：
-$space-types: (
-  "m": margin,
-  "p": padding
-);
-$space-directions: (
-  "t": top,
-  "b": bottom,
-  "l": left,
-  "r": right
-);
-$space-size-base: 1rem;
-$space-sizes: (
-  "0": 0,
-  "1": 0.25,
-  "2": 0.5,
-  "3": 1,
-  "4": 2,
-  "5": 5
-);
 // 循环
 @each $typesKey, $type in $space-types {
   @each $sizesKey, $size in $space-sizes {
@@ -134,6 +89,67 @@ $space-sizes: (
   }
 }
 
-// .aa{
-//     padding: ;: 13px;
-// }
+// width, height
+.w-100 {
+  width: 100%;
+}
+.h-100 {
+  height: 100%;
+}
+
+// 精灵图---sprites
+.sprites {
+  background: url(../images/sprites.png) no-repeat 0 0;
+  background-size: 28.8462rem auto;
+  display: inline-block;
+  &.sprites-tipoff {
+    //爆料站icon
+    width: 1.7692rem;
+    height: 1.5385rem;
+    background-position: 63.546% 15.517%;
+  }
+  &.sprites-arrow {
+    //收起icon
+    width: 0.7692rem;
+    height: 0.7692rem;
+    background-position: 38.577% 52.076%;
+  }
+  &.sprites-story {
+    //故事站icon
+    width: 1.7692rem;
+    height: 1.5385rem;
+    background-position: 90.483% 15.614%;
+  }
+  &.sprites-news {
+    //新闻资讯icon
+    width: 1rem;
+    height: 1rem;
+    background-position: 0.138% 50.452%;
+  }
+  &.sprites-more {
+    //新闻资讯i--更多con
+    width: 1.3846rem;
+    height: 0.2308rem;
+    background-position: 47.619% 56.305%;
+  }
+  
+
+};
+
+
+// 文本溢出省略号
+.eclips{
+  overflow: hidden;
+  text-overflow: ellipsis;
+  word-wrap: none;
+  white-space: nowrap;
+}
+
+
+
+// 边框border相关
+@each $key,$val in $space-directions {
+    .b#{$key}-1{
+      border-#{$val}: 1px solid map-get($colors, 'grey-1');
+    }
+}

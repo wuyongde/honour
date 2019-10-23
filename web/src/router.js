@@ -1,21 +1,21 @@
-import Vue from 'vue'
-import Router from 'vue-router'
-import Home from './views/Home.vue'
+import Vue from "vue";
+import Router from "vue-router";
+import Main from "./views/Main/Main";
 
-Vue.use(Router)
+Vue.use(Router);
 
 export default new Router({
-  mode: 'history',
+  mode: "history",
   base: process.env.BASE_URL,
   routes: [
     {
-      path: '/',
-      redirect:'/home'
+      path: "/",
+      redirect: "/Main"
     },
     {
-      path: '/home',
-      name: 'home',
-      component: Home
+      path: "/Main",
+      name: "Main",
+      component: Main
     }
   ]
-})
+});

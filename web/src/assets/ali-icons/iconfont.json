@@ -1,0 +1,121 @@
+{
+  "id": "1265705",
+  "name": "gshop",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon",
+  "description": "仿饿了么外卖项目",
+  "glyphs": [
+    {
+      "icon_id": "720964",
+      "name": "箭头",
+      "font_class": "xiazai6",
+      "unicode": "e608",
+      "unicode_decimal": 58888
+    },
+    {
+      "icon_id": "1208360",
+      "name": "列表",
+      "font_class": "liebiao",
+      "unicode": "e640",
+      "unicode_decimal": 58944
+    },
+    {
+      "icon_id": "1693098",
+      "name": "大于",
+      "font_class": "icondayu",
+      "unicode": "e604",
+      "unicode_decimal": 58884
+    },
+    {
+      "icon_id": "1725089",
+      "name": "清除",
+      "font_class": "qingchu",
+      "unicode": "e67d",
+      "unicode_decimal": 59005
+    },
+    {
+      "icon_id": "2121094",
+      "name": "三角形",
+      "font_class": "sanjiaoxing",
+      "unicode": "e624",
+      "unicode_decimal": 58916
+    },
+    {
+      "icon_id": "2852678",
+      "name": "三角形",
+      "font_class": "sanjiaoxing-xia1",
+      "unicode": "e63a",
+      "unicode_decimal": 58938
+    },
+    {
+      "icon_id": "4348816",
+      "name": "饿了么",
+      "font_class": "changyonglogo40",
+      "unicode": "e600",
+      "unicode_decimal": 58880
+    },
+    {
+      "icon_id": "5608905",
+      "name": "勾",
+      "font_class": "gou",
+      "unicode": "e606",
+      "unicode_decimal": 58886
+    },
+    {
+      "icon_id": "6064937",
+      "name": "购物车",
+      "font_class": "qicheqianlian-",
+      "unicode": "e605",
+      "unicode_decimal": 58885
+    },
+    {
+      "icon_id": "6216003",
+      "name": "订单",
+      "font_class": "icon-",
+      "unicode": "e601",
+      "unicode_decimal": 58881
+    },
+    {
+      "icon_id": "6402606",
+      "name": "搜索",
+      "font_class": "sousuo",
+      "unicode": "e603",
+      "unicode_decimal": 58883
+    },
+    {
+      "icon_id": "6775089",
+      "name": "我 的",
+      "font_class": "wode-copy-copy",
+      "unicode": "e602",
+      "unicode_decimal": 58882
+    },
+    {
+      "icon_id": "6848101",
+      "name": "关  闭 (7)-01",
+      "font_class": "close",
+      "unicode": "e607",
+      "unicode_decimal": 58887
+    },
+    {
+      "icon_id": "7805800",
+      "name": "手机",
+      "font_class": "shouji",
+      "unicode": "e711",
+      "unicode_decimal": 59153
+    },
+    {
+      "icon_id": "7976270",
+      "name": "发现",
+      "font_class": "faxian",
+      "unicode": "e630",
+      "unicode_decimal": 58928
+    },
+    {
+      "icon_id": "8360859",
+      "name": "赞",
+      "font_class": "zan-copy-copy",
+      "unicode": "e671",
+      "unicode_decimal": 58993
+    }
+  ]
+}

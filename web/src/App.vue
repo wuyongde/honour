@@ -1,6 +1,5 @@
 <template>
-  <div id="app">
-   <!-- <h1>app</h1> -->
+  <div id="App">
    <router-view></router-view>
   </div>
 </template>
@@ -8,7 +7,7 @@
 <script>
 
 export default {
-  name: 'app',
+  name: 'App',
   components: {
     
   }
