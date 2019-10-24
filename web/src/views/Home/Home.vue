@@ -39,29 +39,28 @@
     </div>
 
     <!-- news -->
-    <div class="news bg-white px-3 mt-3 bb-1">
-      <div class="header d-flex py-3 flex-ai-center">
-          <i class="sprites sprites-news"></i>
-          <span class="flex-1 ml-2 text-xl">新闻资讯</span>
-          <i class="sprites sprites-more"></i>
-      </div>
-      <div class="tabs-menu d-flex flex-jc-between flex-ai-center py-3 text-dark">
-          <span :class="{active_news:news_curr_index===n}" v-for="n in 5" :key="n" @click="news_menu_click(n)">热门</span>
-      </div>
-      <swiper :options="swiperOption_news" ref="mySwiper_news" class="swiperBox_news">
-        <!-- slides -->
-        <swiper-slide v-for="m in 5" :key="m">
+    <my-card-item :contents="news_contents" icon="news" title="新闻资讯" theme="news">
+      <template #slide_item="newsProps">
+        <!-- solot传递值 ，理解！！-->
+        <swiper-slide v-for="(content, index) in newsProps.contents" :key="index">
           <ul>
-            <li class="mb-3 d-flex flex-ai-center text-dark-1" v-for="n in 5" :key="n">
-                <span>[公告]</span>
-                <span class="mx-1">|</span>
-                <span class="flex-1 eclips">10月23日体验服停机更新公告 3日体验服停机更新公告</span>
-                <span class="ml-2">10/23</span>
+            <li
+              class="mb-3 d-flex flex-ai-center text-dark-1"
+              v-for="(item,i) in content.items"
+              :key="i"
+            >
+              <span>[{{item.categray}}]</span>
+              <span class="mx-1">|</span>
+              <span class="flex-1 eclips">{{item.title}}</span>
+              <span class="ml-2">{{item.cDate}}</span>
             </li>
           </ul>
         </swiper-slide>
-      </swiper>
-    </div>
+      </template>
+    </my-card-item>
+
+     
+
   </div>
 </template>
 <script>
@@ -69,52 +68,43 @@ export default {
   name: "Home",
   data() {
     return {
-      news_categray: ["热门", "新闻", "公告", "活动", "赛事"],
-      news_curr_index:1,
+      news_contents: new Array(5).fill({}).map((v, i) => {
+        return {
+          name: "热门" + i,
+          items: new Array(5).fill({}).map((val, index) => {
+            return {
+              categray: "热门" + i,
+              title: "10月23日体验服停机更新公告" + index,
+              cDate: "10/23"
+            };
+          })
+        };
+      }),
+
       swiperOption_ad: {
-        // some swiper options/callbacks
-        // 所有的参数同 swiper 官方 api 参数
-        // ...
         autoplay: true, //可选选项，自动滑动
         loop: true, // 循环模式选项
         // 如果需要分页器
         pagination: {
           el: ".swiper-pagination-ad",
-          clickable: true,
+          clickable: true
         },
         // 如果需要前进后退按钮
         navigation: {
           nextEl: ".swiper-button-next",
           prevEl: ".swiper-button-prev"
         }
-      },
-       swiperOption_news: {
-        // some swiper options/callbacks
-        // 所有的参数同 swiper 官方 api 参数
-        // ...
-        // 如果需要分页器
-      },
+      }
     };
   },
   computed: {
-      swiper_ad() {
-        return this.$refs.mySwiper_ad.swiper
-      },
-       swiper_news() {
-        return this.$refs.mySwiper_news.swiper
-      },
-    },
-    mounted() {
-      // current swiper instance
-      // 然后你就可以使用当前上下文内的swiper对象去做你想做的事了
-    //   this.swiper.slideTo(3, 1000, false)
-    },
-    methods: {
-        news_menu_click(n){
-            this.news_curr_index = n
-            this.swiper_news.slideTo(n-1, 300, false)
-        }
-    },
+    swiper_ad() {
+      return this.$refs.mySwiper_ad.swiper;
+    }
+  },
+  mounted() {},
+
+  methods: {}
 };
 </script>
 <style lang="scss" scoped>
@@ -161,27 +151,6 @@ export default {
         }
       }
     }
-    .packup {
-    }
   }
-
-//   news
-.news{
-
-    .header{
-        border-bottom: 1px solid map-get($colors, "light");
-    }
-    .tabs-menu{
-
-        .active_news{
-            border-bottom: 2px solid map-get($colors, 'primary' );
-            color: map-get($colors, 'primary' );
-        }
-    }
-    .swiperBox_news{
-
-    }
-
-}
 }
 </style>

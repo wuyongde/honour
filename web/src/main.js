@@ -15,6 +15,15 @@ import VueAwesomeSwiper from "vue-awesome-swiper";
 import "swiper/dist/css/swiper.css"; //swiper样式，必须
 Vue.use(VueAwesomeSwiper /* { default global options } */);
 
+
+// 全局引入卡片组件Card--
+import Card from './components/Card'
+Vue.component('my-card',Card)
+import CardItem from './components/CardItem'
+Vue.component('my-card-item',CardItem)
+
+
+
 Vue.config.productionTip = false;
 
 new Vue({

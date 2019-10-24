@@ -150,6 +150,6 @@
 // 边框border相关
 @each $key,$val in $space-directions {
     .b#{$key}-1{
-      border-#{$val}: 1px solid map-get($colors, 'grey-1');
+      border-#{$val}: 1px solid map-get($colors, 'light');
     }
 }
