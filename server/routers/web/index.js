@@ -865,6 +865,16 @@ router.get("/heros", async (req, res) => {
   res.send(cats);
 });
 
-// 查询物品
+// 查询文章详情
+router.get('/articles',async (req,res)=>{
+  let article = await articlesModel.findById(req.query._id)
+  // 组织数据并响应
+  // 随机取两篇相关文章
+  let articles = await articlesModel.find()
+  article.related = articles.slice(3,6)
+
+  res.send(article)
+
+})
 
 module.exports = router;

@@ -32,7 +32,7 @@ Vue.prototype.$http = http;
 // 定义全局过滤器
 import dayjs from 'dayjs'
 Vue.filter('formatDate',(v)=>{
-  return dayjs(v).format('MM/DD')
+  return dayjs(v).format('YYYY/MM/DD')
 })
 
 

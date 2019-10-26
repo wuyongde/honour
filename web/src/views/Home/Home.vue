@@ -44,16 +44,17 @@
         <!-- solot传递值 ，理解！！-->
         <swiper-slide v-for="(content, index) in newsProps.contents" :key="index">
           <ul>
-            <li
+            <router-link tag="li" :to="`/ArticleDetail/${item._id}`"
               class="mb-3 d-flex flex-ai-center text-dark-1"
               v-for="(item,i) in content.newsList"
               :key="i"
+
             >
               <span class="text-blue">[{{item.categoryName}}]</span>
               <span class="mx-1">|</span>
               <span class="flex-1 eclips">{{item.title}}</span>
               <span class="ml-2 text-sm text-grey">{{item.createdAt | formatDate}}</span>
-            </li>
+            </router-link>
           </ul>
         </swiper-slide>
       </template>

@@ -11,7 +11,7 @@
         <div class="topNav pb-2 pt-3 bg-primary text-white">
             <div class="nav d-flex flex-jc-around">
                 <div class="navItem active">
-                    <router-link tag="span" to="">首页</router-link>
+                    <router-link tag="span" to="/Home">首页</router-link>
                 </div>
                 <div class="navItem">
                     <router-link tag="span" to="">攻略中心</router-link>
@@ -21,18 +21,14 @@
                 </div>
             </div>
         </div>
-        <!-- <router-view></router-view> -->
+        <router-view></router-view>
         <!-- Home区域 -->
-        <Home></Home>
     </div>
 </template>
 <script>
-import Home from '../Home/Home.vue'
+
 export default {
-    name:'Main',
-    components:{
-        Home
-    }
+    name:'Main'
 }
 </script>
 <style lang="scss" scoped>

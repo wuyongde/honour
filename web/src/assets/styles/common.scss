@@ -132,30 +132,42 @@
     height: 0.2308rem;
     background-position: 47.619% 56.305%;
   }
-  &.sprites-heros{
+  &.sprites-heros {
     width: 0.9231rem;
     height: 1rem;
     background-position: 46.768% 60.452%;
-
   }
-  
-
-};
-
+}
 
 // 文本溢出省略号
-.eclips{
+.eclips {
   overflow: hidden;
   text-overflow: ellipsis;
   word-wrap: none;
   white-space: nowrap;
 }
 
-
-
 // 边框border相关
-@each $key,$val in $space-directions {
-    .b#{$key}-1{
-      border-#{$val}: 1px solid map-get($colors, 'light');
+@each $key, $val in $space-directions {
+  .b#{$key}-1 {
+    border-#{$val}: 1px solid map-get($colors, "grey-1");
+  }
+}
+
+// 文章详情内容相关样式格式化
+
+.ArticleDetail {
+  .content {
+    p {
+      line-height: 2.5em;
+      
     }
+    img {
+      width: 100%;
+      height: auto;
+    }
+    h1,h2,h3,h4,h5,h6{
+      line-height: 2.5em;
+    }
+  }
 }
