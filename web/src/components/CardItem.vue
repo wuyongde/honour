@@ -31,7 +31,9 @@ export default {
   data() {
     return {
       curr_index: 0,
-      swiperOption: {}
+      swiperOption: {       //swiper的配置项
+         autoHeight: true, //高度随内容变化
+      }
     };
   },
   computed: {
@@ -61,6 +63,9 @@ export default {
       border-bottom: 2px solid map-get($colors, "primary");
       color: map-get($colors, "primary");
     }
+  }
+  .swiperBox{
+    // max-height: 1000px;
   }
 }
 </style>

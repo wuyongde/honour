@@ -1,5 +1,5 @@
 // 数据模型--物品模块
-const mongoose = require("./dbConn");
+const mongoose = require("../middleware/dbConn");
 
 //创建schema
 let schema = new mongoose.Schema({

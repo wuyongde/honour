@@ -37,7 +37,12 @@ export default {
 </script>
 <style lang="scss" scoped>
     .Main{
-
+        .topBar{                //吸顶效果，css3新增，要考虑浏览器兼容性
+            position: sticky;
+            top: 0;
+            left: 0;
+            z-index: 999;
+        }
         button{
             border-radius: 3px;
 

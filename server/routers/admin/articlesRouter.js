@@ -10,7 +10,7 @@ router.post("/", async (req, res) => {
   let { title, categories,content } = req.body;
   let result;
   try {
-    result = await articlesModel.create({ title, categories,content,pub_date:new Date() });
+    result = await articlesModel.create({ title, categories,content});
   } catch (error) {
     return res.json({
       code: -1,
@@ -48,7 +48,7 @@ router.get("/", async (req, res) => {
 // 修改文章
 router.put("/", async (req, res) => {
   let { title, categories,content,_id } = req.body;
-  let result = await articlesModel.findByIdAndUpdate(_id, { title, categories,content,pub_date:new Date() });
+  let result = await articlesModel.findByIdAndUpdate(_id, { title, categories,content});
   // 响应
   res.json({
     code: 0,

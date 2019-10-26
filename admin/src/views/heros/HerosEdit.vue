@@ -258,6 +258,7 @@ export default {
       let _id = this.$route.params._id;
       let res = await this.$http.get(`/heros?_id=${_id}`);
       this.model = res.data.data;
+      this.model.scores = this.model.scores || {}
     },
     // 获取所有分类
     async getCategories() {

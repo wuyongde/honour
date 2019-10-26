@@ -46,20 +46,39 @@
           <ul>
             <li
               class="mb-3 d-flex flex-ai-center text-dark-1"
-              v-for="(item,i) in content.items"
+              v-for="(item,i) in content.newsList"
               :key="i"
             >
-              <span>[{{item.categray}}]</span>
+              <span class="text-blue">[{{item.categoryName}}]</span>
               <span class="mx-1">|</span>
               <span class="flex-1 eclips">{{item.title}}</span>
-              <span class="ml-2">{{item.cDate}}</span>
+              <span class="ml-2 text-sm text-grey">{{item.createdAt | formatDate}}</span>
             </li>
           </ul>
         </swiper-slide>
       </template>
     </my-card-item>
 
-     
+    <!-- heros -->
+    <my-card-item :contents="heros_contents" icon="heros" title="英雄列表" theme="heros">
+      <template #slide_item="newsProps">
+        <!-- solot传递值 ，理解！！-->
+        <swiper-slide v-for="(content, index) in newsProps.contents" :key="index">
+          <ul class="d-flex flex-wrap">
+            <li
+              v-for="(hero, index) in content.herosList"
+              :key="index"
+              style="width:20%;"
+              class="d-flex flex-column flex-ai-center"
+            >
+              <img :src="hero.icon" alt style="width:4.3715rem;height:4.3715rem;" />
+              <h3 class="text-xs text-dark-1 my-1" style="font-weight:400;">{{hero.name}}</h3>
+            </li>
+          </ul>
+        </swiper-slide>
+      </template>
+    </my-card-item>
+
 
   </div>
 </template>
@@ -68,19 +87,8 @@ export default {
   name: "Home",
   data() {
     return {
-      news_contents: new Array(5).fill({}).map((v, i) => {
-        return {
-          name: "热门" + i,
-          items: new Array(5).fill({}).map((val, index) => {
-            return {
-              categray: "热门" + i,
-              title: "10月23日体验服停机更新公告" + index,
-              cDate: "10/23"
-            };
-          })
-        };
-      }),
-
+      news_contents: [],
+      heros_contents: [],
       swiperOption_ad: {
         autoplay: true, //可选选项，自动滑动
         loop: true, // 循环模式选项
@@ -103,8 +111,20 @@ export default {
     }
   },
   mounted() {},
-
-  methods: {}
+  created() {
+    this.fetch_news();
+    this.fetch_heros();
+  },
+  methods: {
+    async fetch_news() {
+      let result = await this.$http.get("/news");
+      this.news_contents = result.data;
+    },
+    async fetch_heros() {
+      let result = await this.$http.get("/heros");
+      this.heros_contents = result.data;
+    }
+  }
 };
 </script>
 <style lang="scss" scoped>
@@ -154,3 +174,5 @@ export default {
   }
 }
 </style>
+
+

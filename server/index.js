@@ -59,6 +59,10 @@ app.use("/admin/api/login", loginRouter);
 let tokenVerifyRouter = require("./routers/admin/tokenVerifyRouter");
 app.use("/admin/api/tokenVerify", token_verify(), tokenVerifyRouter);
 
+// 引入客户端web路由
+let webRouter = require("./routers/web/index");
+app.use("/web/api", webRouter);
+
 // 统一处理错误
 // app.use(async (err, req, res, next) => {
 //   res.status(err.statusCode).send({
