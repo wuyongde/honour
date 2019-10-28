@@ -7,10 +7,10 @@ let herosModel = require("../../models/herosModel");
 
 // 添加英雄
 router.post("/", async (req, res) => {
-  let { name, icon,title,categories,scores,skills,goods,useage_skills,battle_skills,team_skills } = req.body;
+  let { name, icon,title,categories,scores,skills,goods,useage_skills,battle_skills,team_skills,bg_img} = req.body;
   let result;
   try {
-    result = await herosModel.create({ name, icon,title,categories,scores,skills,goods,useage_skills,battle_skills,team_skills });
+    result = await herosModel.create({ name, icon,title,categories,scores,skills,goods,useage_skills,battle_skills,team_skills,bg_img });
   } catch (error) {
     return res.json({
       code: -1,
@@ -47,8 +47,8 @@ router.get("/", async (req, res) => {
 
 // 修改英雄
 router.put("/", async (req, res) => {
-  let {_id, name, icon,title,categories,scores,skills,goods,useage_skills,battle_skills,team_skills } = req.body;
-  let result = await herosModel.findByIdAndUpdate(_id, { name, icon,title,categories,scores,skills,goods,useage_skills,battle_skills,team_skills });
+  let {_id, name, icon,title,categories,scores,skills,goods,useage_skills,battle_skills,team_skills,bg_img } = req.body;
+  let result = await herosModel.findByIdAndUpdate(_id, { name, icon,title,categories,scores,skills,goods,useage_skills,battle_skills,team_skills,bg_img });
   // 响应
   res.json({
     code: 0,

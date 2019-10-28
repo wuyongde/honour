@@ -66,7 +66,7 @@
         <!-- solot传递值 ，理解！！-->
         <swiper-slide v-for="(content, index) in newsProps.contents" :key="index">
           <ul class="d-flex flex-wrap">
-            <li
+            <router-link tag="li" :to="`/HeroDetail/${hero._id}`"
               v-for="(hero, index) in content.herosList"
               :key="index"
               style="width:20%;"
@@ -74,7 +74,7 @@
             >
               <img :src="hero.icon" alt style="width:4.3715rem;height:4.3715rem;" />
               <h3 class="text-xs text-dark-1 my-1" style="font-weight:400;">{{hero.name}}</h3>
-            </li>
+            </router-link>
           </ul>
         </swiper-slide>
       </template>

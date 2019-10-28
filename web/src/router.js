@@ -1,8 +1,9 @@
 import Vue from "vue";
 import Router from "vue-router";
 import Main from "./views/Main/Main";
-import Home from './views/Home/Home'
-import ArticleDetail from './views/Article/ArticleDetail'
+import Home from "./views/Home/Home";
+import ArticleDetail from "./views/Article/ArticleDetail";
+import HeroDetail from "./views/Hero/HeroDetail";
 
 Vue.use(Router);
 
@@ -18,10 +19,20 @@ export default new Router({
       path: "/Main",
       name: "Main",
       component: Main,
-      children:[
-        {path:'/Home',name:'Home',component:Home},
-        {path:'/ArticleDetail/:_id',name:'ArticleDetail',component:ArticleDetail}
+      children: [
+        { path: "/Home", name: "Home", component: Home },
+        {
+          path: "/ArticleDetail/:_id",
+          name: "ArticleDetail",
+          component: ArticleDetail
+        }
       ]
+    },
+    {
+      path: "/HeroDetail/:_id",
+      name: "HeroDetail",
+      component: HeroDetail,
+      props: true
     }
   ]
 });

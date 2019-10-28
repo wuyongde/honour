@@ -872,9 +872,18 @@ router.get('/articles',async (req,res)=>{
   // 随机取两篇相关文章
   let articles = await articlesModel.find()
   article.related = articles.slice(3,6)
-
   res.send(article)
-
 })
+
+// 查询英雄详情
+router.get('/hero',async (req,res)=>{
+
+  let hero = await herosModel.findById(req.query._id).populate('categories').lean()
+  // 组织数据并响应
+  res.send(hero)
+})
+
+
+
 
 module.exports = router;

@@ -10,6 +10,7 @@ import router from "./router";
 // 创建一个axios实例
 const http = axios.create({
   baseURL: "http://127.0.0.1:3000/admin/api",
+  // baseURL: "http://192.168.1.3:3000/admin/api",
   timeout: 1000
 });
 

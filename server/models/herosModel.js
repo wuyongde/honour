@@ -37,7 +37,9 @@ let schema = new mongoose.Schema({
       name: { type: String },
       icon: { type: String },
       describs: { type: String },
-      tips: { type: String }
+      tips: { type: String },
+      cold: { type: String },
+      cost: { type: String }
     }
   ],
   goods: {
@@ -55,7 +57,8 @@ let schema = new mongoose.Schema({
   },
   useage_skills: { type: String }, //使用技巧
   battle_skills: { type: String }, //对抗技巧
-  team_skills: { type: String } //团战思路
+  team_skills: { type: String }, //团战思路
+  bg_img: { type: String } //背景图
 });
 
 // 创建数据模型

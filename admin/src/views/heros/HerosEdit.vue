@@ -7,17 +7,32 @@
           <el-form-item label="名称">
             <el-input placeholder="输入英雄名称" v-model="model.name" @focus="isShowAlert=false"></el-input>
           </el-form-item>
+
           <el-form-item label="图标">
             <el-upload
               class="avatar-uploader"
-              :action="$http.defaults.baseURL + '/uploads'"
+              :action="fileUploadAction"
+              :headers="addHeaders"
               :show-file-list="false"
-              :on-success="afterUpload"
+              :on-success="res=>model.icon=res.imgUrl"
             >
               <img v-if="model.icon" :src="model.icon" class="avatar" />
               <i v-else class="el-icon-plus avatar-uploader-icon"></i>
             </el-upload>
           </el-form-item>
+          <el-form-item label="背景图">
+            <el-upload
+              class="avatar-uploader"
+              :action="fileUploadAction"
+              :headers="addHeaders"
+              :show-file-list="false"
+              :on-success="res=>model.bg_img=res.imgUrl"
+            >
+              <img v-if="model.bg_img" :src="model.bg_img" class="avatar" />
+              <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+            </el-upload>
+          </el-form-item>
+
           <el-form-item label="称号（标签）">
             <el-input placeholder="输入英雄称号" v-model="model.title" @focus="isShowAlert=false"></el-input>
           </el-form-item>
@@ -117,34 +132,62 @@
           </el-form-item>
         </el-tab-pane>
         <el-tab-pane label="技能管理" name="second">
-          <el-button size="small" type="primary" icon="el-icon-plus" plain @click.prevent="model.skills.push({name:'',icon:'',describs:'',tips:''})">添加技能</el-button>
+          <el-button
+            size="small"
+            type="primary"
+            icon="el-icon-plus"
+            plain
+            @click.prevent="model.skills.push({name:'',icon:'',describs:'',tips:''})"
+          >添加技能</el-button>
           <div class="skills-box">
             <div class="item" v-for="(item, index) in model.skills" :key="index">
               <el-form-item label="招式名称">
                 <el-input placeholder="输入招式名称" v-model="item.name" @focus="isShowAlert=false"></el-input>
               </el-form-item>
+              <el-form-item label="冷却值">
+                <el-input placeholder="输入冷却值" v-model="item.cold" @focus="isShowAlert=false"></el-input>
+              </el-form-item>
+              <el-form-item label="消耗值">
+                <el-input placeholder="输入消耗值" v-model="item.cost" @focus="isShowAlert=false"></el-input>
+              </el-form-item>
               <el-form-item label="招式图标">
-                 <el-upload
-              class="avatar-uploader"
-              :action="$http.defaults.baseURL + '/uploads'"
-              :show-file-list="false"
-              :on-success="res=>item.icon=res.imgUrl"
-            >
-              <img v-if="item.icon" :src="item.icon" class="avatar" />
-              <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-            </el-upload>
+                <el-upload
+                  class="avatar-uploader"
+                  :action="fileUploadAction"
+                  :headers="addHeaders"
+                  :show-file-list="false"
+                  :on-success="res=>item.icon=res.imgUrl"
+                >
+                  <img v-if="item.icon" :src="item.icon" class="avatar" />
+                  <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                </el-upload>
               </el-form-item>
               <el-form-item label="招式描述">
-                <el-input placeholder="输入招式描述" type="textarea" v-model="item.describs" @focus="isShowAlert=false"></el-input>
+                <el-input
+                  placeholder="输入招式描述"
+                  type="textarea"
+                  v-model="item.describs"
+                  @focus="isShowAlert=false"
+                ></el-input>
               </el-form-item>
               <el-form-item label="招式提示">
-                <el-input placeholder="输入招式提示" type="textarea" v-model="item.tips" @focus="isShowAlert=false"></el-input>
+                <el-input
+                  placeholder="输入招式提示"
+                  type="textarea"
+                  v-model="item.tips"
+                  @focus="isShowAlert=false"
+                ></el-input>
               </el-form-item>
-             <el-form-item>
-                <el-button size="small" type="danger" icon="el-icon-delete" plain @click.prevent="model.skills.splice(index,1)">删除</el-button>
-             </el-form-item>
+              <el-form-item>
+                <el-button
+                  size="small"
+                  type="danger"
+                  icon="el-icon-delete"
+                  plain
+                  @click.prevent="model.skills.splice(index,1)"
+                >删除</el-button>
+              </el-form-item>
             </div>
-
           </div>
         </el-tab-pane>
       </el-tabs>
@@ -161,7 +204,7 @@ export default {
   name: "HerosEdit",
   data() {
     return {
-      activeName:'first',
+      activeName: "first",
       model: {
         _id: "",
         name: "",
@@ -190,7 +233,8 @@ export default {
         partners: [], //队友
         skills: [
           //技能（招式）
-        ]
+        ],
+        bg_img: ""
       },
       isShowAlert: false,
       alertMsg: "",
@@ -200,10 +244,6 @@ export default {
   },
   methods: {
     // 图片上传成功后的操作
-    afterUpload(res) {
-      //res是文件上传成功后服务端的返回数据
-      this.model.icon = res.imgUrl;
-    },
 
     // 添加英雄
     add() {
@@ -258,7 +298,7 @@ export default {
       let _id = this.$route.params._id;
       let res = await this.$http.get(`/heros?_id=${_id}`);
       this.model = res.data.data;
-      this.model.scores = this.model.scores || {}
+      this.model.scores = this.model.scores || {};
     },
     // 获取所有分类
     async getCategories() {
@@ -335,13 +375,13 @@ export default {
   }
 }
 
-.skills-box{
+.skills-box {
   display: flex;
   justify-content: flex-start;
   flex-wrap: wrap;
   align-content: flex-start;
   margin-top: 20px;
-  &>div{
+  & > div {
     margin-right: 50px;
     margin-bottom: 30px;
     width: 400px;
