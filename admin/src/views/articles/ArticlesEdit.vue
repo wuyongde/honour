@@ -113,7 +113,7 @@ export default {
       var formData = new FormData();
       formData.append("file", file);
       // 发ajax请求
-      let res=await this.$http.post('http://127.0.0.1:3000/admin/api/uploads',formData)
+      let res=await this.$http.post(fileUploadAction,formData)
       // console.log(res.data.imgUrl)
       Editor.insertEmbed(cursorLocation, "image", res.data.imgUrl);
           resetUploader();

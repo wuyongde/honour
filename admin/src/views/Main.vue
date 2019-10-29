@@ -2,7 +2,7 @@
   <div class="Main">
     <el-container style="height: 100vh;">
       <el-aside width="200px" style="background-color: rgb(238, 241, 246)">
-        <el-menu router :default-openeds="['2', '/adminUsers/list']">
+        <el-menu router >
           <el-submenu index="1">
             <template slot="title">
               <i class="el-icon-message"></i>内容管理
@@ -16,25 +16,25 @@
               <template slot="title">物品</template>
               <el-menu-item index="/goods/edit">新建物品</el-menu-item>
               <el-menu-item index="/goods/list">物品列表</el-menu-item>
-            </el-menu-item-group> 
+            </el-menu-item-group>
             <el-menu-item-group>
               <template slot="title">英雄</template>
               <el-menu-item index="/heros/edit">新建英雄</el-menu-item>
               <el-menu-item index="/heros/list">英雄列表</el-menu-item>
-            </el-menu-item-group>       
-             <el-menu-item-group>
+            </el-menu-item-group>
+            <el-menu-item-group>
               <template slot="title">文章</template>
               <el-menu-item index="/articles/edit">新建文章</el-menu-item>
               <el-menu-item index="/articles/list">文章列表</el-menu-item>
-            </el-menu-item-group>     
-             <el-menu-item-group>
+            </el-menu-item-group>
+            <el-menu-item-group>
               <template slot="title">广告位</template>
               <el-menu-item index="/adverts/edit">新建广告位</el-menu-item>
               <el-menu-item index="/adverts/list">广告位列表</el-menu-item>
-            </el-menu-item-group>  
+            </el-menu-item-group>
           </el-submenu>
-         
-         <el-submenu index="2">
+
+          <el-submenu index="2">
             <template slot="title">
               <i class="el-icon-message"></i>系统管理
             </template>
@@ -42,7 +42,7 @@
               <template slot="title">管理员管理</template>
               <el-menu-item index="/adminUsers/edit">新建管理员</el-menu-item>
               <el-menu-item index="/adminUsers/list">管理员列表</el-menu-item>
-            </el-menu-item-group>          
+            </el-menu-item-group>
           </el-submenu>
         </el-menu>
       </el-aside>
@@ -53,7 +53,7 @@
             <i class="el-icon-setting" style="margin-right: 15px"></i>
             <el-dropdown-menu slot="dropdown">
               <!-- <el-dropdown-item>查看</el-dropdown-item>
-              <el-dropdown-item>新增</el-dropdown-item> -->
+              <el-dropdown-item>新增</el-dropdown-item>-->
               <el-dropdown-item @click.native.prevent="logout">注销</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
@@ -70,7 +70,7 @@
 
 <script>
 export default {
-  name:'Main',
+  name: "Main",
   data() {
     const item = {
       date: "2016-05-02",
@@ -78,21 +78,21 @@ export default {
       address: "上海市普陀区金沙江路 1518 弄"
     };
     return {
-      tableData: Array(20).fill(item)     //批量生成数组元素---测试用
+      // tableData: Array(20).fill(item)     //批量生成数组元素---测试用
     };
   },
   methods: {
     // 注销登录
-    logout(){
+    logout() {
       // 清除token并重定向到登录页
-      localStorage.setItem('token','')
+      localStorage.setItem("token", "");
       this.$message({
-        type:'success',
-        message:'已注销'
-      })
-      this.$router.push('/Login')
+        type: "success",
+        message: "已注销"
+      });
+      this.$router.push("/Login");
     }
-  },
+  }
 };
 </script>
 

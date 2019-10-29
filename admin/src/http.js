@@ -9,8 +9,8 @@ import router from "./router";
 
 // 创建一个axios实例
 const http = axios.create({
-  baseURL: "http://127.0.0.1:3000/admin/api",
-  // baseURL: "http://192.168.1.3:3000/admin/api",
+  baseURL:process.env.VUE_APP_API_URL || '/admin/api',      //环境变量：表示，此app在编译时（npm run build）时，若提供了VUE_APP_API_URL变量，则将值给baseURL，否则将'/admin/api'给baseURL，灵活，方便上线部署；   而开发环境定义的变量则在.env.development里定义。
+  // baseURL: "http://127.0.0.1:3000/admin/api",
   timeout: 1000
 });
 

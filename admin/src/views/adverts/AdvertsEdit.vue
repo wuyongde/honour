@@ -7,7 +7,7 @@
       </el-form-item>
 
     <!-- 添加广告项 -->
-     <el-button size="small" type="primary" icon="el-icon-plus" plain @click.prevent="advert.items.push({img_url:'',link_url:'',title:''})">添加技能</el-button>
+     <el-button size="small" type="primary" icon="el-icon-plus" plain @click.prevent="advert.items.push({img_url:'',link_url:'',title:''})">添加广告</el-button>
           <div class="skills-box">
             <div class="item" v-for="(item, index) in advert.items" :key="index">
               <el-form-item label="广告标题">
@@ -16,7 +16,8 @@
               <el-form-item label="广告图片">
                  <el-upload
               class="avatar-uploader"
-              :action="$http.defaults.baseURL + '/uploads'"
+              :action="fileUploadAction"
+              :headers="addHeaders"
               :show-file-list="false"
               :on-success="res=>item.img_url=res.imgUrl"
             >

@@ -102,23 +102,14 @@
   background: url(../images/sprites.png) no-repeat 0 0;
   background-size: 28.8462rem auto;
   display: inline-block;
-  &.sprites-tipoff {
-    //爆料站icon
-    width: 1.7692rem;
-    height: 1.5385rem;
-    background-position: 63.546% 15.517%;
-  }
   &.sprites-arrow {
     //收起icon
     width: 0.7692rem;
     height: 0.7692rem;
     background-position: 38.577% 52.076%;
-  }
-  &.sprites-story {
-    //故事站icon
-    width: 1.7692rem;
-    height: 1.5385rem;
-    background-position: 90.483% 15.614%;
+    &.reverse{
+      transform: rotate(180deg);
+    }
   }
   &.sprites-news {
     //新闻资讯icon
@@ -137,6 +128,79 @@
     height: 1rem;
     background-position: 46.768% 60.452%;
   }
+  &.sprites-tipoff {
+    //爆料站icon
+    width: 1.7692rem;
+    height: 1.5385rem;
+    background-position: 63.546% 15.517%;
+  }
+  &.sprites-story {
+    //故事站icon
+    width: 1.7692rem;
+    height: 1.5385rem;
+    background-position: 90.483% 15.614%;
+  }
+  &.sprites-shop {
+    // 周边商城
+    width: 1.4615rem;
+    height: 1.6923rem;
+    background-position: 36.746% 0.924%;
+  }
+  &.sprites-taste {
+    // 体验服
+    width: 1.4615rem;
+    height: 1.6923rem;
+    background-position: 10.408% 15.517%;
+  }
+  &.sprites-new {
+    // 新人专区
+    width: 1.4615rem;
+    height: 1.6923rem;
+    background-position: 89.733% 1.266%;
+  }
+  &.sprites-inherit {
+    // 荣耀.传承
+    width: 1.8462rem;
+    height: 1.6923rem;
+    background-position: 36.467% 15.287%;
+  }
+  &.sprites-lib {
+    // 模拟战资料库
+    width: 1.4615rem;
+    height: 1.6923rem;
+    background-position: 36.746% 0.924%;
+  }
+  &.sprites-lion {
+    // 王者营地
+    width: 1.4615rem;
+    height: 1.6923rem;
+    background-position: 36.746% 0.924%;
+  }
+  &.sprites-public {
+    // 公众号
+    width: 1.4615rem;
+    height: 1.6923rem;
+    background-position: 36.746% 0.924%;
+  }
+  &.sprites-ver {
+    // 版本介绍
+    width: 1.4615rem;
+    height: 1.6923rem;
+    background-position: 36.746% 0.924%;
+  }
+  &.sprites-fight {
+    // 对局环境
+    width: 1.4615rem;
+    height: 1.6923rem;
+    background-position: 36.746% 0.924%;
+  }
+  &.sprites-infint {
+    // 无限王者团
+    width: 1.4615rem;
+    height: 1.6923rem;
+    background-position: 36.746% 0.924%;
+  }
+
 }
 
 // 文本溢出省略号

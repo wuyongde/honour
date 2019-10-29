@@ -24,7 +24,8 @@ Vue.component("my-card-item", CardItem);
 // 引入axios并创建实例，并让Vue使用
 import axios from "axios";
 let http = axios.create({
-  baseURL: "http://localhost:3000/web/api",
+  baseURL:process.env.VUE_APP_API_URL || '/web/api'
+  // baseURL: "http://localhost:3000/web/api",
   // baseURL: "http://192.168.1.3:3000/admin/api",
 });
 Vue.prototype.$http = http;

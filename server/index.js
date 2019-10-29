@@ -20,6 +20,18 @@ app.use(
   express.static(path.join(__dirname, "./uploads/"))
 );
 
+// 开放静态资源---admin
+app.use(
+  "/admin",
+  express.static(path.join(__dirname, "./public/admin"))
+);
+// 开放静态资源---web
+app.use(
+  "/",
+  express.static(path.join(__dirname, "./public/web"))
+);
+
+
 // 引入中间件---token校验
 const token_verify = require("./middleware/token_verify");
 

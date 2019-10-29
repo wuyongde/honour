@@ -2,39 +2,31 @@
   <div class="Home">
     <swiper :options="swiperOption_ad" ref="mySwiper_ad" class="swiperBox_ad">
       <!-- slides -->
-      <swiper-slide>
-        <a href="http://www.baidu.com/">
-          <img src="../../assets/images/home-ad-1.jpeg" alt class="w-100 h-100" />
-        </a>
-      </swiper-slide>
-      <swiper-slide>
-        <a href="http://www.baidu.com/">
-          <img src="../../assets/images/home-ad-2.jpeg" alt class="w-100 h-100" />
-        </a>
-      </swiper-slide>
-      <swiper-slide>
-        <a href="http://www.baidu.com/">
-          <img src="../../assets/images/home-ad-3.jpeg" alt class="w-100 h-100" />
+      <swiper-slide v-for="(item, index) in top_ads" :key="index">
+        <a :href="item.link_url">
+          <img :src="item.img_url" alt class="w-100 h-100" />
         </a>
       </swiper-slide>
 
       <!-- Optional controls -->
       <div class="swiper-pagination-ad" slot="pagination"></div>
-      <div class="swiper-button-prev" slot="button-prev"></div>
-      <div class="swiper-button-next" slot="button-next"></div>
     </swiper>
 
     <!-- navs  -->
     <div class="navs bg-white mt-3">
-      <div class="nav-box d-flex flex-wrap">
-        <div class="nav-item d-flex flex-column flex-ai-center my-3" v-for="n in 12" :key="n">
-          <i class="sprites sprites-tipoff"></i>
-          <span class="text-sm mt-2 text-dark-1">爆料站</span>
+      <div class="nav-box d-flex" :class="{'flex-wrap':!packup_flag}">
+        <div
+          class="nav-item d-flex flex-column flex-ai-center my-3"
+          v-for="(item,n) in nav_items"
+          :key="n"
+        >
+          <i class="sprites" :class="`sprites-${item.icon_class}`"></i>
+          <span class="text-sm mt-2 text-dark-1">{{item.title}}</span>
         </div>
       </div>
-      <div class="packup text-center bg-light-1 py-2">
-        <i class="sprites sprites-arrow"></i>
-        <span class="text-sm text-dark-1 ml-1">收起</span>
+      <div class="packup text-center bg-light-1 py-2" @click="packup_flag=!packup_flag">
+        <i class="sprites sprites-arrow" :class="{reverse:packup_flag===true}"></i>
+        <span class="text-sm text-dark-1 ml-1">{{packup_flag?'展开':'收起'}}</span>
       </div>
     </div>
 
@@ -44,11 +36,12 @@
         <!-- solot传递值 ，理解！！-->
         <swiper-slide v-for="(content, index) in newsProps.contents" :key="index">
           <ul>
-            <router-link tag="li" :to="`/ArticleDetail/${item._id}`"
+            <router-link
+              tag="li"
+              :to="`/ArticleDetail/${item._id}`"
               class="mb-3 d-flex flex-ai-center text-dark-1"
               v-for="(item,i) in content.newsList"
               :key="i"
-
             >
               <span class="text-blue">[{{item.categoryName}}]</span>
               <span class="mx-1">|</span>
@@ -66,7 +59,9 @@
         <!-- solot传递值 ，理解！！-->
         <swiper-slide v-for="(content, index) in newsProps.contents" :key="index">
           <ul class="d-flex flex-wrap">
-            <router-link tag="li" :to="`/HeroDetail/${hero._id}`"
+            <router-link
+              tag="li"
+              :to="`/HeroDetail/${hero._id}`"
               v-for="(hero, index) in content.herosList"
               :key="index"
               style="width:20%;"
@@ -79,8 +74,6 @@
         </swiper-slide>
       </template>
     </my-card-item>
-
-
   </div>
 </template>
 <script>
@@ -88,20 +81,32 @@ export default {
   name: "Home",
   data() {
     return {
+      nav_items: [
+        { title: "爆料站", icon_class: "tipoff" },
+        { title: "故事站", icon_class: "story" },
+        { title: "周边商城", icon_class: "shop" },
+        { title: "体验服", icon_class: "taste" },
+        { title: "新人专区", icon_class: "new" },
+        { title: "荣耀.传承", icon_class: "inherit" },
+        { title: "模拟战资料库", icon_class: "lib" },
+        { title: "王者营地", icon_class: "lion" },
+        { title: "公众号", icon_class: "public" },
+        { title: "版本介绍", icon_class: "ver" },
+        { title: "对局环境", icon_class: "fight" },
+        { title: "无限王者团", icon_class: "infint" }
+      ],
+      top_ads: [], //顶部轮播图
+      packup_flag: false,
       news_contents: [],
       heros_contents: [],
       swiperOption_ad: {
-        autoplay: true, //可选选项，自动滑动
+        autoplay: true,
         loop: true, // 循环模式选项
+        speed: 500,
         // 如果需要分页器
         pagination: {
           el: ".swiper-pagination-ad",
           clickable: true
-        },
-        // 如果需要前进后退按钮
-        navigation: {
-          nextEl: ".swiper-button-next",
-          prevEl: ".swiper-button-prev"
         }
       }
     };
@@ -115,6 +120,7 @@ export default {
   created() {
     this.fetch_news();
     this.fetch_heros();
+    this.fetch_top_ads()
   },
   methods: {
     async fetch_news() {
@@ -124,11 +130,16 @@ export default {
     async fetch_heros() {
       let result = await this.$http.get("/heros");
       this.heros_contents = result.data;
+    },
+    async fetch_top_ads() {
+      // 获取顶部轮播图数据
+      let result = await this.$http.get("/top_ads");
+      this.top_ads = result.data;
     }
   }
 };
 </script>
-<style lang="scss" scoped>
+<style lang="scss">
 // 引scss变量
 @import "../../assets//styles/_variables.scss";
 .Home {
@@ -148,14 +159,15 @@ export default {
       background-color: rgba(0, 0, 0, 0);
       text-align: right;
       padding-right: 15px;
-    }
-    .swiper-button-prev {
-      height: 20px;
-      width: 25px;
-    }
-    .swiper-button-next {
-      height: 20px;
-      width: 25px;
+      & > span {
+        &.swiper-pagination-bullet {
+          border-radius: 2px;
+          background-color: #fff;
+        }
+        &.swiper-pagination-bullet-active {
+          background-color: map-get($colors, "primary");
+        }
+      }
     }
   }
 
@@ -166,10 +178,13 @@ export default {
     .nav-box {
       .nav-item {
         width: 25%;
+        flex-shrink: 0;
         border-right: 1px solid map-get($colors, "light");
         &:nth-child(4n) {
           border-right: none;
         }
+      }
+      .packup {
       }
     }
   }

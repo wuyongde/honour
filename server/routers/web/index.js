@@ -108,6 +108,14 @@ router.get("/news", async (req, res) => {
   res.send(cats);
 });
 
+// web端获取首页顶部轮播图数据
+router.get('/top_ads',async (req,res)=>{
+  // 查数据库
+  let result = await advertsModel.findOne({name:'首页顶部轮播图'})
+  // 响应数据
+  res.send(result.items)
+})
+
 // 英雄数据初始化--
 router.get("/heros/init", async (req, res) => {
   // 原始数据
