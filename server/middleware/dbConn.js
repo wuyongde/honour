@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 
 
 // 数据库连接字符串
-const db_url = "mongodb://127.0.0.1:27017/honour";
+const db_url = "mongodb://127.0.0.1:27017/honour";      //若是正式服务器，此处db地址可能需要更改！
 // 连接数据库
 mongoose
   .connect(db_url, { useNewUrlParser: true })

@@ -102,9 +102,10 @@ export default {
       let res = await this.$http.get(`/articles?_id=${_id}`);
       this.article = res.data.data;
     },
-    // 获取所有分类
+    // 获取新闻资讯下的所有子分类
     async getCategories() {
-      let result = await this.$http.get("/categories");
+      let parent = '5dab45ce9265ba7350670065'
+      let result = await this.$http.get(`/categories?parent=${parent}`);
       this.categories = result.data.data;
     },
 
@@ -113,7 +114,7 @@ export default {
       var formData = new FormData();
       formData.append("file", file);
       // 发ajax请求
-      let res=await this.$http.post(fileUploadAction,formData)
+      let res=await this.$http.post(this.fileUploadAction,formData)
       // console.log(res.data.imgUrl)
       Editor.insertEmbed(cursorLocation, "image", res.data.imgUrl);
           resetUploader();

@@ -30,15 +30,21 @@ router.get(
   "/",       //加入token校验的中间件
   async (req, res) => {
     // 判断：是查询所有还是查询某一个分类
-    let { _id } = req.query;
+    let { _id ,parent} = req.query;
     let result;
-    if (!_id) {
-      //查询所有
-      result = await categoriesModel.find().populate("parent"); //populate表示把某个字段关联的数据提取过来！！
-    } else {
+    if(_id){
       //查询某一分类
       result = await categoriesModel.findById(_id);
     }
+    if(parent){
+      //查询某一父类下面的子分类
+      result = await categoriesModel.find({parent:parent})
+    }
+    if(!_id && !parent){
+      //查询所有
+      result = await categoriesModel.find().populate("parent"); //populate表示把某个字段关联的数据提取过来！！
+    }
+
     // 响应
     res.json({
       code: 0,

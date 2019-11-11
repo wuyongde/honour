@@ -297,17 +297,13 @@ export default {
     async getheroById() {
       let _id = this.$route.params._id;
       let res = await this.$http.get(`/heros?_id=${_id}`);
-      this.model = res.data.data;
-      this.model.scores = this.model.scores || {
-        diffcut: 0,
-        technicl: 0,
-        attack: 0,
-        live: 0
-      };
+      // this.model = res.data.data;
+      Object.assign(this.model,res.data.data)     //合并对象，解决当获取的后台数据没有一些数据如scores会导致前端页面报错或无法响应式改变的问题！！
     },
-    // 获取所有分类
+    // 获取英雄分类
     async getCategories() {
-      let result = await this.$http.get("/categories");
+      let parent ='5daaea095dbfe76ec732da4b'
+      let result = await this.$http.get(`/categories?parent=${parent}`);    //只取英雄分类下面的子分类
       this.categories = result.data.data;
     },
     // 获取所有装备

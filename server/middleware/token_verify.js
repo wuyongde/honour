@@ -1,3 +1,4 @@
+// 模块：专门用于校验客户端token
 // 引入jsonwebtoken
 const jwt = require("jsonwebtoken"); //引入jsonwebtoken
 const secret = "kkdhlwl2ihgh;nznjl"; //加密字符(注意：：：加密字符串其实应该写在全局配置文件里，理解！！！)
@@ -29,7 +30,7 @@ module.exports = opt =>{                    //opt方便以后传入参数，以�
               msg: "未找到用户"
             });
           }
-          // 用户校验通过，走下一流程
+          // 客户端token校验通过，表示用户请求合法，走下一流程
           next();
         });
       }
