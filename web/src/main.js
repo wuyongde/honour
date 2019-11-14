@@ -33,8 +33,15 @@ Vue.prototype.$http = http;
 
 // 定义全局过滤器
 import dayjs from 'dayjs'
-Vue.filter('formatDate',(v)=>{
-  return dayjs(v).format('YYYY/MM/DD')
+Vue.filter('formatDate',(v,formatStr)=>{
+  switch (formatStr){
+    case 'MM-DD':
+      return dayjs(v).format('MM-DD')
+      break
+    default:
+        return dayjs(v).format('YYYY/MM/DD')
+  }
+  
 })
 
 

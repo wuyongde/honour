@@ -8,6 +8,7 @@ let articlesModel = require("../../models/articlesModel");
 let categoriesModel = require("../../models/categoriesModel");
 let goodsModel = require("../../models/goodsModel");
 let herosModel = require("../../models/herosModel");
+let videosModel = require('../../models/videosModel')
 
 //新闻资讯相关数据初始化--仅限从官网抓取数据用
 router.get("/news/init", async (req, res) => {
@@ -891,6 +892,51 @@ router.get('/hero',async (req,res)=>{
   let hero = await herosModel.findById(req.query._id).populate('categories').lean()
   // 组织数据并响应
   res.send(hero)
+})
+
+
+// 查询视频列表数据
+router.get('/videos',async (req,res)=>{
+  // 判断是查询某一个视频还是视频列表
+  let {_id} = req.query
+  if(_id){
+    // 查某一个视频
+    const video = await videosModel.findById(_id)
+    // 随机取一些视频做为推荐（猜您喜欢）
+    const videos = await videosModel.find()
+    video.likes=videos
+    return res.send(video)
+  }
+  // 查视频列表
+   // 主要难点是组织客户端需要的数据。。。
+   const parent = await categoriesModel.findOne({
+    name: "精彩视频"
+  });
+  const cats = await categoriesModel.aggregate([
+    { $match: { parent: parent._id } },
+    {
+      $lookup: {
+        from: "videos",
+        localField: "_id",
+        foreignField: "category",
+        as: "videosList"
+      }
+    }
+  ]);
+  // 响应
+  res.send(cats)
+})
+
+// 视频播放次数增加
+router.patch('/videos',async (req,res)=>{
+  let {_id,playSort} = req.body
+  console.log(req.body)
+  // 写数据库
+  const result = await videosModel.findByIdAndUpdate(_id,{playSort})
+  res.send({
+    code:0,
+    msg:'修改成功'
+  })
 })
 
 

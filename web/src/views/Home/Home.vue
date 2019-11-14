@@ -74,6 +74,35 @@
         </swiper-slide>
       </template>
     </my-card-item>
+
+    <!-- videos -->
+     <my-card-item :contents="videos_contents" icon="videos" title="精彩视频" theme="videos">
+      <template #slide_item="newsProps">
+        <!-- solot传递值 ，理解！！-->
+        <swiper-slide v-for="(content, index) in newsProps.contents" :key="index">
+          <ul class="d-flex flex-wrap flex-jc-between">
+            <router-link
+              tag="li"
+              :to="`/VideoDetail/${video._id}`"
+              v-for="(video, index) in content.videosList"
+              :key="index"
+              style="width:49%;"
+              class="d-flex flex-column flex-ai-center"
+            >
+              <img :src="video.imgUrl" alt style="width:100%;height:7.3077rem;" />             
+              <h3 class="text-sm text-dark-1 my-1" style="font-weight:400;height:2.7692rem;width:100%;overflow:hidden;">{{video.title}}</h3>
+              <div class="d-flex flex-ai-center text-xs text-grey px-1" style="width:100%;">
+                <i class="sprites sprites-videos"></i>
+                <span class="flex-1 mx-1">{{video.playSort}}</span>
+                <span>{{video.createdAt | formatDate('MM-DD')}}</span>
+              </div>
+            </router-link>
+          </ul>
+        </swiper-slide>
+      </template>
+    </my-card-item>
+
+
   </div>
 </template>
 <script>
@@ -99,6 +128,7 @@ export default {
       packup_flag: false,
       news_contents: [],
       heros_contents: [],
+      videos_contents: [],
       swiperOption_ad: {
         autoplay: true,
         loop: true, // 循环模式选项
@@ -120,7 +150,8 @@ export default {
   created() {
     this.fetch_news();
     this.fetch_heros();
-    this.fetch_top_ads()
+    this.fetch_top_ads();
+    this.fetch_videos()
   },
   methods: {
     async fetch_news() {
@@ -130,6 +161,10 @@ export default {
     async fetch_heros() {
       let result = await this.$http.get("/heros");
       this.heros_contents = result.data;
+    },
+     async fetch_videos() {
+      let result = await this.$http.get("/videos");
+      this.videos_contents = result.data;
     },
     async fetch_top_ads() {
       // 获取顶部轮播图数据

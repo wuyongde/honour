@@ -3,7 +3,9 @@ import Router from "vue-router";
 import Main from "./views/Main/Main";
 import Home from "./views/Home/Home";
 import ArticleDetail from "./views/Article/ArticleDetail";
+import VideoDetail from "./views/Video/VideoDetail";
 import HeroDetail from "./views/Hero/HeroDetail";
+
 
 Vue.use(Router);
 
@@ -25,7 +27,13 @@ export default new Router({
           path: "/ArticleDetail/:_id",
           name: "ArticleDetail",
           component: ArticleDetail
-        }
+        },
+        {
+          path: "/VideoDetail/:_id",
+          name: "VideoDetail",
+          component: VideoDetail,
+          props:true
+        },
       ]
     },
     {
