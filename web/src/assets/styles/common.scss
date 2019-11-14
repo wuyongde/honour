@@ -61,7 +61,7 @@
   }
 }
 
-// 循环
+// 边距：margin、padding
 @each $typesKey, $type in $space-types {
   @each $sizesKey, $size in $space-sizes {
     // m-3,p-1...

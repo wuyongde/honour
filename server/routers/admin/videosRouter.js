@@ -1,0 +1,76 @@
+// 视频相关路由
+const express = require("express");
+const router = express.Router();
+
+// 引入数据模型
+let videosModel = require("../../models/videosModel");
+
+// 添加物品
+router.post("/", async (req, res) => {
+  let { title, url,imgUrl,category } = req.body;
+  let result;
+  try {
+    result = await videosModel.create({ title, url,imgUrl,category });
+  } catch (error) {
+    return res.json({
+      code: -1,
+      msg: "添加失败",
+      error: error
+    });
+  }
+  res.json({
+    code: 0,
+    msg: "添加成功",
+    data: result
+  });
+});
+
+// 查询物品
+router.get("/", async (req, res) => {
+  // 判断：是查询所有还是查询某一个物品
+  let { _id } = req.query;
+  let result;
+  if (!_id) {
+    //查询所有
+    result = await videosModel.find().populate('category'); //
+  } else {
+    //查询某一物品
+    result = await videosModel.findById(_id);
+  }
+  // 响应
+  res.json({
+    code: 0,
+    msg: "查询成功",
+    data: result
+  });
+});
+
+// 修改物品
+router.put("/", async (req, res) => {
+  let { _id,  title, url,imgUrl,category } = req.body;
+  let result = await videosModel.findByIdAndUpdate(_id, {  title, url,imgUrl,category });
+  // 响应
+  res.json({
+    code: 0,
+    msg: "修改成功",
+    data: result
+  });
+});
+
+// 删除物品
+router.delete("/", async (req, res) => {
+  let { _id } = req.query;
+  let result = await videosModel.findByIdAndRemove(_id);
+  // 响应
+  res.json({
+    code: 0,
+    msg: "删除成功",
+    data: result
+  });
+});
+
+// 图片上传
+
+
+
+module.exports = router;

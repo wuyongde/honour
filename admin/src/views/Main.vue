@@ -32,6 +32,11 @@
               <el-menu-item index="/adverts/edit">新建广告位</el-menu-item>
               <el-menu-item index="/adverts/list">广告位列表</el-menu-item>
             </el-menu-item-group>
+            <el-menu-item-group>
+              <template slot="title">精彩视频</template>
+              <el-menu-item index="/videos/edit">新建视频</el-menu-item>
+              <el-menu-item index="/videos/list">视频列表</el-menu-item>
+            </el-menu-item-group>
           </el-submenu>
 
           <el-submenu index="2">

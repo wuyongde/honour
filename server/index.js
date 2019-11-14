@@ -63,6 +63,10 @@ app.use("/admin/api/adverts", token_verify(), advertsRouter);
 let adminUsersRouter = require("./routers/admin/adminUsersRouter");
 app.use("/admin/api/adminUsers", token_verify(), adminUsersRouter);
 
+// 引入videos相关路由
+let videosRouter = require("./routers/admin/videosRouter");
+app.use("/admin/api/videos", token_verify(), videosRouter);
+
 // 引入login相关路由
 let loginRouter = require("./routers/admin/loginRouter");
 app.use("/admin/api/login", loginRouter);
@@ -74,6 +78,7 @@ app.use("/admin/api/tokenVerify", token_verify(), tokenVerifyRouter);
 // 引入客户端web路由
 let webRouter = require("./routers/web/index");
 app.use("/web/api", webRouter);
+
 
 // 统一处理错误
 // app.use(async (err, req, res, next) => {

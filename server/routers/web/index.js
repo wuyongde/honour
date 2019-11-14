@@ -877,9 +877,11 @@ router.get("/heros", async (req, res) => {
 router.get('/articles',async (req,res)=>{
   let article = await articlesModel.findById(req.query._id)
   // 组织数据并响应
-  // 随机取两篇相关文章
-  let articles = await articlesModel.find()
-  article.related = articles.slice(3,6)
+  // 随机取两篇同类型作为相关文章
+  let articles = await articlesModel.find({
+    categories:article.categories
+  })
+  article.related = articles.slice(0,2)
   res.send(article)
 })
 

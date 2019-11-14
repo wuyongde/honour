@@ -6,7 +6,7 @@
         <el-input placeholder="输入管理员名称" v-model="adminUser.username" @focus="isShowAlert=false"></el-input>
       </el-form-item>
       <el-form-item label="密码">
-        <el-input placeholder="输入管理员密码" type="password" v-model="adminUser.password" @focus="isShowAlert=false"></el-input>
+        <el-input clearable show-password placeholder="输入管理员密码" type="password" v-model="adminUser.password" @focus="isShowAlert=false"></el-input>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click.prevent="add">提交</el-button>

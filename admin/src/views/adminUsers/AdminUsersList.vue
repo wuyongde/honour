@@ -6,8 +6,9 @@
 
       <el-table-column prop="username" label="用户名"></el-table-column>
       <el-table-column fixed="right" label="操作" width="200">
-        <template slot-scope="scope">
+        <template slot-scope="scope" v-if="scope.row.username !== 'admin'">
           <el-button
+            :disabled="scope.row.username === 'admin'"
             type="primary"
             size="small"
             @click="$router.push(`/adminUsers/edit/${scope.row._id}`)"
