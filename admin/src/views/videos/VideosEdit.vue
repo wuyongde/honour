@@ -31,6 +31,7 @@
           :on-success="afterUploadImg"
           :on-error="errorUpload"
           :headers="addHeaders"
+          :before-upload="beforeImageUpload"
         >
           <img v-if="video.imgUrl" :src="video.imgUrl" class="avatar" />
           <i v-else class="el-icon-plus avatar-uploader-icon"></i>
@@ -45,9 +46,10 @@
           :on-success="afterUploadVideo"
           :on-error="errorUpload"
           :headers="addHeaders"
+          :before-upload="beforeVideoUpload"
         >
           <!-- <img v-if="video.url" :src="video.url" class="avatar" /> -->
-          <video controls v-if="video.url" class="avatar">
+          <video controls v-if="video.url" class="avatar" ref="videoObj">
             <source :src="video.url" type="video/mp4" />
             <source :src="video.url" type="video/ogg" />您的浏览器不支持Video标签。
           </video>
@@ -63,6 +65,7 @@
   </div>
 </template>
 <script>
+import { videoParent } from "../../plugins/config";
 export default {
   name: "VideosEdit",
   data() {
@@ -81,91 +84,54 @@ export default {
       categories: []
     };
   },
+  props: {
+    _id: String
+  },
   methods: {
     // 图片上传成功后的操作
     afterUploadImg(res) {
-      this.$set(this.video, "imgUrl", res.imgUrl);
+      this.$set(this.video, "imgUrl", res.data.result.imgUrl);
     },
     // 视频上传成功后的操作
     afterUploadVideo(res) {
-      this.$set(this.video, "url", res.imgUrl);
-    },
-    // 文件上传失败的操作
-    errorUpload(err) {
-      // 判断：如果返回的状态码为401，说明是token校验失败，则跳转到登录页
-      if (err.status === 401) {
-        this.$message({
-          type: "error",
-          message: "token校验失败，请重新登录"
-        });
-        this.$router.push("/Login");
-      }
+      this.$set(this.video, "url", res.data.result.imgUrl); //重新设置video视频地址
+      this.$refs.videoObj.load(); //重新加载video
     },
 
     // 添加视频
-    add() {
+    async add() {
       // 判断视频名是否合法
       let { title, url, imgUrl, category } = this.video;
       title = title.trim();
-      if (!title) {
-        this.alertMsg = "视频标题不合法";
-        this.isShowAlert = true;
-        return;
-      }
+
       // 判断是添加视频还是编辑视频
-      let { _id } = this.$route.params;
+      let { _id } = this;
       if (!_id) {
         // 添加视频---发送ajax请求
-        this.$http
-          .post("/videos", { title, url, imgUrl, category })
-          .then(res => {
-            // 添加成功
-            this.$message({
-              type: "success",
-              message: "视频添加成功！"
-            });
-            this.$router.push("/videos/list");
-          })
-          .catch(err => {
-            // 添加失败
-            this.alertMsg = `视频添加失败！${err}`;
-            this.isShowAlert = true;
-          });
+        await this.$http.post("/videos", { title, url, imgUrl, category });
+        // 跳转
+        this.$router.push("/videos/list");
       } else {
         // 编辑视频---发送ajax请求
-        this.$http
-          .put("/videos", { _id, title, url, imgUrl, category })
-          .then(res => {
-            // 修改成功
-            this.$message({
-              type: "success",
-              message: "视频修改成功！"
-            });
-            this.$router.push("/videos/list");
-          })
-          .catch(err => {
-            // 修改失败
-            this.alertMsg = `视频修改失败！${err}`;
-            this.isShowAlert = true;
-          });
+        await this.$http.put("/videos", { _id, title, url, imgUrl, category });
+        // 跳转
+        this.$router.push("/videos/list");
       }
     },
     // 根据_id请求视频
     async getvideoById() {
-      let _id = this.$route.params._id;
-      let res = await this.$http.get(`/videos?_id=${_id}`);
-      this.video = res.data.data;
+      let res = await this.$http.get(`/videos?_id=${this._id}`);
+      this.video = res.data.data.result;
     },
     // 获取视频分类
     async getVideoCategories() {
-      let parent = "5dca69e31cfca528dea00e5a";
-      let result = await this.$http.get(`/categories?parent=${parent}`); //只取视频分类下面的子分类
-      this.categories = result.data.data;
+      let result = await this.$http.get(`/categories?parent=${videoParent}`); //只取视频分类下面的子分类
+      this.categories = result.data.data.result;
     }
   },
   created() {
     //在组件的created阶段
-    this.$route.params._id && this.getvideoById(); //当路径参数中有_id时，才执行获取数据操作
+    this._id && this.getvideoById(); //当路径参数中有_id时，才执行获取数据操作
     this.getVideoCategories();
   }
 };

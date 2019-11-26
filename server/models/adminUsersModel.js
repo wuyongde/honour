@@ -1,4 +1,4 @@
-// 数据模型--物品模块
+// 数据模型--后台管理员模块
 const mongoose = require("../middleware/dbConn");
 
 //创建schema

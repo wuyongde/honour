@@ -14,7 +14,8 @@
               :action="fileUploadAction"
               :headers="addHeaders"
               :show-file-list="false"
-              :on-success="res=>model.icon=res.imgUrl"
+              :on-success="res=>model.icon=res.data.result.imgUrl"
+              :before-upload="beforeAvatarUpload"
             >
               <img v-if="model.icon" :src="model.icon" class="avatar" />
               <i v-else class="el-icon-plus avatar-uploader-icon"></i>
@@ -26,7 +27,8 @@
               :action="fileUploadAction"
               :headers="addHeaders"
               :show-file-list="false"
-              :on-success="res=>model.bg_img=res.imgUrl"
+              :on-success="res=>model.bg_img=res.data.result.imgUrl"
+              :before-upload="beforeImageUpload"
             >
               <img v-if="model.bg_img" :src="model.bg_img" class="avatar" />
               <i v-else class="el-icon-plus avatar-uploader-icon"></i>
@@ -156,7 +158,8 @@
                   :action="fileUploadAction"
                   :headers="addHeaders"
                   :show-file-list="false"
-                  :on-success="res=>item.icon=res.imgUrl"
+                  :on-success="res=>item.icon=res.data.result.imgUrl"
+                  :before-upload="beforeAvatarUpload"
                 >
                   <img v-if="item.icon" :src="item.icon" class="avatar" />
                   <i v-else class="el-icon-plus avatar-uploader-icon"></i>
@@ -200,6 +203,7 @@
   </div>
 </template>
 <script>
+import  { heroParent } from '../../plugins/config'
 export default {
   name: "HerosEdit",
   data() {
@@ -242,74 +246,40 @@ export default {
       goods: [] //装备列表
     };
   },
+  props: {
+    _id: String
+  },
   methods: {
-    // 图片上传成功后的操作
-
     // 添加英雄
-    add() {
-      // 判断英雄名是否合法
-      let { name, icon } = this.model;
-      name = name.trim();
-      if (!name) {
-        this.alertMsg = "英雄名称不合法";
-        this.isShowAlert = true;
-        return;
-      }
+    async add() {
       // 判断是添加英雄还是编辑英雄
-      let { _id } = this.$route.params;
+      let { _id } = this;
       if (!_id) {
         // 添加英雄---发送ajax请求
-        this.$http
-          .post("/heros", this.model)
-          .then(res => {
-            // 添加成功
-            this.$message({
-              type: "success",
-              message: "英雄添加成功！"
-            });
-            this.$router.push("/heros/list");
-          })
-          .catch(err => {
-            // 添加失败
-            this.alertMsg = `英雄添加失败！${err}`;
-            this.isShowAlert = true;
-          });
+        this.$http.post("/heros", this.model);
+        // 跳转
+        this.$router.push("/heros/list");
       } else {
         // 编辑英雄---发送ajax请求
-        this.$http
-          .put("/heros", this.model)
-          .then(res => {
-            // 修改成功
-            this.$message({
-              type: "success",
-              message: "英雄修改成功！"
-            });
-            this.$router.push("/heros/list");
-          })
-          .catch(err => {
-            // 修改失败
-            this.alertMsg = `英雄修改失败！${err}`;
-            this.isShowAlert = true;
-          });
+        this.$http.put("/heros", this.model);
+        // 跳转
+        this.$router.push("/heros/list");
       }
     },
     // 根据_id请求英雄
     async getheroById() {
-      let _id = this.$route.params._id;
-      let res = await this.$http.get(`/heros?_id=${_id}`);
-      // this.model = res.data.data;
-      Object.assign(this.model,res.data.data)     //合并对象，解决当获取的后台数据没有一些数据如scores会导致前端页面报错或无法响应式改变的问题！！
+      let res = await this.$http.get(`/heros?_id=${this._id}`);
+      Object.assign(this.model, res.data.data.result); //合并对象，解决当获取的后台数据没有一些数据如scores会导致前端页面报错或无法响应式改变的问题！！
     },
     // 获取英雄分类
     async getCategories() {
-      let parent ='5daaea095dbfe76ec732da4b'
-      let result = await this.$http.get(`/categories?parent=${parent}`);    //只取英雄分类下面的子分类
-      this.categories = result.data.data;
+      let result = await this.$http.get(`/categories?parent=${heroParent}`); //只取英雄分类下面的子分类
+      this.categories = result.data.data.result;
     },
     // 获取所有装备
     async getGoods() {
       let result = await this.$http.get("/goods");
-      this.goods = result.data.data;
+      this.goods = result.data.data.result;
     }
   },
 
@@ -317,7 +287,7 @@ export default {
     //在组件的created阶段
     this.getCategories(); //获取分类列表
     this.getGoods(); //获取所有装备列表
-    this.$route.params._id && this.getheroById(); //当路径参数中有_id时，才执行获取数据操作
+    this._id && this.getheroById(); //当路径参数中有_id时，才执行获取数据操作
   }
 };
 </script>

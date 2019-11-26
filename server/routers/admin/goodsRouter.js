@@ -8,20 +8,27 @@ let goodsModel = require("../../models/goodsModel");
 // 添加物品
 router.post("/", async (req, res) => {
   let { name, icon } = req.body;
+  // 检查参数是否上传
+  if (!name || !icon) {
+    return res.status(400).json({
+      err: "参数不正确"
+    });
+  }
   let result;
+  // 操作数据库
   try {
     result = await goodsModel.create({ name, icon });
   } catch (error) {
-    return res.json({
-      code: -1,
-      msg: "添加失败",
-      error: error
+    return res.status(500).json({
+      err: "添加失败：服务器错误"
     });
   }
-  res.json({
-    code: 0,
+  // 响应
+  res.status(201).json({
     msg: "添加成功",
-    data: result
+    data: {
+      result
+    }
   });
 });
 
@@ -32,45 +39,77 @@ router.get("/", async (req, res) => {
   let result;
   if (!_id) {
     //查询所有
-    result = await goodsModel.find(); //
+    try {
+      result = await goodsModel.find();
+    } catch (error) {
+      return res.status(500).json({
+        err: "查询失败：服务器错误"
+      });
+    }
   } else {
     //查询某一物品
-    result = await goodsModel.findById(_id);
+    try {
+      result = await goodsModel.findById(_id);
+    } catch (error) {
+      return res.status(500).json({
+        err: "查询失败：服务器错误"
+      });
+    }
   }
   // 响应
-  res.json({
-    code: 0,
-    msg: "查询成功",
-    data: result
+  res.status(200).json({
+    data: {
+      result
+    }
   });
 });
 
 // 修改物品
 router.put("/", async (req, res) => {
   let { _id, name, icon } = req.body;
-  let result = await goodsModel.findByIdAndUpdate(_id, { name, icon });
+  // 检查参数是否上传
+  if (!_id || !name || !icon) {
+    return res.status(400).json({
+      err: "参数不正确"
+    });
+  }
+  // 操作数据库
+  let result;
+  try {
+    result = await goodsModel.findByIdAndUpdate(_id, { name, icon });
+  } catch (error) {
+    return res.status(500).json({
+      err: "修改失败：服务器错误"
+    });
+  }
   // 响应
-  res.json({
-    code: 0,
-    msg: "修改成功",
-    data: result
+  res.status(200).json({
+    msg: "修改成功"
   });
 });
 
 // 删除物品
 router.delete("/", async (req, res) => {
   let { _id } = req.query;
-  let result = await goodsModel.findByIdAndRemove(_id);
+  // 判断参数是否上传
+  if (!_id) {
+    return res.status(400).json({
+      err: "参数不正确"
+    });
+  }
+  // 操作数据库
+  let result;
+  try {
+    result = await goodsModel.findByIdAndRemove(_id);
+  } catch (error) {
+    return res.status(500).json({
+      err: "删除失败：服务器错误"
+    });
+  }
   // 响应
-  res.json({
-    code: 0,
-    msg: "删除成功",
-    data: result
-  });
+  res.status(204).end();
 });
 
 // 图片上传
-
-
 
 module.exports = router;

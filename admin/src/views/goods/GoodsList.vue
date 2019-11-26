@@ -5,7 +5,7 @@
       <el-table-column prop="_id" label="_id" style="width:220px;"></el-table-column>
       <el-table-column label="图标">
         <template slot-scope="scope">
-          <img :src="scope.row.icon" alt="" style="height:50px;width:50px;border-radius:5px;">
+          <img :src="scope.row.icon" alt style="height:50px;width:50px;border-radius:5px;" />
         </template>
       </el-table-column>
       <el-table-column prop="name" label="名称"></el-table-column>
@@ -31,9 +31,9 @@ export default {
     };
   },
   methods: {
-    async getgoods() {
+    async getGoods() {
       let res = await this.$http.get("/goods");
-      this.goods = res.data.data;
+      this.goods = res.data.data.result;
     },
     del(row) {
       // 弹框确认是否删除
@@ -44,16 +44,9 @@ export default {
       })
         .then(async () => {
           // 确认要删除，发ajax请求
-          let res = await this.$http.delete(`/goods?_id=${row._id}`);
-          if (res.data.code === 0) {
-            //删除成功
-            this.$message({
-              type: "success",
-              message: "删除成功!"
-            });
-            // 重新获取数据，刷新页面
-            this.getgoods();
-          }
+          await this.$http.delete(`/goods?_id=${row._id}`);
+          // 重新获取数据，刷新页面
+          this.getGoods();
         })
         .catch(() => {
           // 点击了取消按钮
@@ -65,7 +58,7 @@ export default {
     }
   },
   created() {
-    this.getgoods();
+    this.getGoods();
   }
 };
 </script>

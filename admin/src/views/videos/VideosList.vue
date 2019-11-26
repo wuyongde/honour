@@ -21,7 +21,7 @@
   </div>
 </template>
 <script>
-import dayjs from 'dayjs'
+import dayjs from "dayjs";
 export default {
   name: "VideosList",
   data() {
@@ -29,16 +29,13 @@ export default {
       videos: []
     };
   },
-  computed: {
-   
-  },
   methods: {
     async getvideos() {
       let res = await this.$http.get("/videos");
-      this.videos = res.data.data;
-      this.videos.map(video=>{
-        video.createdAt = dayjs(video.createdAt).format('YYYY-MM-DD')
-      })
+      this.videos = res.data.data.result;
+      this.videos.map(video => {
+        video.createdAt = dayjs(video.createdAt).format("YYYY-MM-DD");
+      });
     },
     del(row) {
       // 弹框确认是否删除
@@ -49,16 +46,9 @@ export default {
       })
         .then(async () => {
           // 确认要删除，发ajax请求
-          let res = await this.$http.delete(`/videos?_id=${row._id}`);
-          if (res.data.code === 0) {
-            //删除成功
-            this.$message({
-              type: "success",
-              message: "删除成功!"
-            });
-            // 重新获取数据，刷新页面
-            this.getvideos();
-          }
+          await this.$http.delete(`/videos?_id=${row._id}`);
+          // 重新获取数据，刷新页面
+          this.getvideos();
         })
         .catch(() => {
           // 点击了取消按钮

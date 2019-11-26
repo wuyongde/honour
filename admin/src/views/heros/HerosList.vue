@@ -5,7 +5,7 @@
       <el-table-column prop="_id" label="_id" style="width:220px;"></el-table-column>
       <el-table-column label="头像">
         <template slot-scope="scope">
-          <img :src="scope.row.icon" alt="" style="height:50px;width:50px;border-radius:5px;">
+          <img :src="scope.row.icon" alt style="height:50px;width:50px;border-radius:5px;" />
         </template>
       </el-table-column>
       <el-table-column prop="name" label="名称"></el-table-column>
@@ -33,7 +33,7 @@ export default {
   methods: {
     async getheros() {
       let res = await this.$http.get("/heros");
-      this.heros = res.data.data;
+      this.heros = res.data.data.result;
     },
     del(row) {
       // 弹框确认是否删除
@@ -44,16 +44,9 @@ export default {
       })
         .then(async () => {
           // 确认要删除，发ajax请求
-          let res = await this.$http.delete(`/heros?_id=${row._id}`);
-          if (res.data.code === 0) {
-            //删除成功
-            this.$message({
-              type: "success",
-              message: "删除成功!"
-            });
-            // 重新获取数据，刷新页面
-            this.getheros();
-          }
+          await this.$http.delete(`/heros?_id=${row._id}`);
+          // 重新获取数据，刷新页面
+          this.getheros();
         })
         .catch(() => {
           // 点击了取消按钮

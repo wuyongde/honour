@@ -3,16 +3,23 @@
     <h1>{{$route.params._id?'编辑':'创建'}}管理员</h1>
     <el-form @submit.native.prevent>
       <el-form-item label="用户名">
-        <el-input placeholder="输入管理员名称" v-model="adminUser.username" @focus="isShowAlert=false"></el-input>
+        <el-input placeholder="输入管理员名称" v-model.trim="adminUser.username" @blur="isShowAlert=true" clearable></el-input>
       </el-form-item>
       <el-form-item label="密码">
-        <el-input clearable show-password placeholder="输入管理员密码" type="password" v-model="adminUser.password" @focus="isShowAlert=false"></el-input>
+        <el-input
+          clearable
+          show-password
+          placeholder="输入管理员密码"
+          type="password"
+          v-model.trim="adminUser.password"
+          @blur="isShowAlert=true"
+        ></el-input>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click.prevent="add">提交</el-button>
+        <el-button type="primary" @click.prevent="add" :disabled="formCheckFlag">提交</el-button>
       </el-form-item>
     </el-form>
-    <el-alert :title="alertMsg" type="error" show-icon v-show="isShowAlert"></el-alert>
+    <el-alert :title="alertMsg" type="error" show-icon v-show="formCheckFlag && isShowAlert"></el-alert>
   </div>
 </template>
 <script>
@@ -25,69 +32,61 @@ export default {
         username: "",
         password: ""
       },
-      isShowAlert: false,
-      alertMsg: ""
+      alertMsg: "",
+      isShowAlert:false
     };
   },
-  methods: {
-    // 添加管理员
-    add() {
-      // 判断管理员名是否合法
+  props:{
+    _id:{
+      type:String
+    }
+  },
+  computed: {
+    // 表单校验
+    formCheckFlag(){
+      // 定义正则
+      const regUser = /^[a-zA-Z0-9_-]{3,16}$/;
+      const regPass = /^.*(?=.{6,})(?=.*\d)(?=.*[A-Za-z])(?=.*[!@#$]).*$/;
+      // 取表单值
       let { username, password } = this.adminUser;
-      username = username.trim();
-      if (!username) {
-        this.alertMsg = "管理员名称不合法";
-        this.isShowAlert = true;
-        return;
+      // 校验
+      if(!regUser.test(username)){
+        this.alertMsg = "用户名必须是3-16位字母、数字、_、-的组合";
+        return true
       }
-      // 判断是添加管理员还是编辑管理员
-      let { _id } = this.$route.params;
+      if(!regPass.test(password)){
+        this.alertMsg = "密码至少6位，且必须是数字、字母、特殊字符!@#$的组合";
+        return true
+      }
+      return false
+    }
+  },
+  methods: {
+    // 添加或修改
+    async add() {
+      // 取表单数据
+      let { username, password } = this.adminUser;
+      // 判断是添加还是修改
+      let { _id } = this
       if (!_id) {
-        // 添加管理员---发送ajax请求
-        this.$http
-          .post("/adminUsers", { username, password })
-          .then(res => {
-            // 添加成功
-            this.$message({
-              type: "success",
-              message: "管理员添加成功！"
-            });
-            this.$router.push("/adminUsers/list");
-          })
-          .catch(err => {
-            // 添加失败
-            this.alertMsg = `管理员添加失败！${err}`;
-            this.isShowAlert = true;
-          });
+        // 添加
+        await this.$http.post("/adminUsers", { username, password });
+        this.$router.push("/adminUsers/list");
       } else {
-        // 编辑管理员---发送ajax请求
-        this.$http
-          .put("/adminUsers", { _id, username, password })
-          .then(res => {
-            // 修改成功
-            this.$message({
-              type: "success",
-              message: "管理员修改成功！"
-            });
-            this.$router.push("/adminUsers/list");
-          })
-          .catch(err => {
-            // 修改失败
-            this.alertMsg = `管理员修改失败！${err}`;
-            this.isShowAlert = true;
-          });
+        // 修改
+        await this.$http.put("/adminUsers", { _id, username, password });
+        this.$router.push("/adminUsers/list");
       }
     },
     // 根据_id请求管理员
-    async getadminUserById() {
-      let _id = this.$route.params._id;
-      let res = await this.$http.get(`/adminUsers?_id=${_id}`);
-      this.adminUser = res.data.data;
+    async getAdminUserById() {
+      let res = await this.$http.get(`/adminUsers?_id=${this._id}`);
+      this.adminUser = res.data.data.result;
     }
   },
   created() {
     //在组件的created阶段
-    this.$route.params._id && this.getadminUserById(); //当路径参数中有_id时，才执行获取数据操作
+    this._id && this.getAdminUserById(); //当路径参数中有_id时，才执行获取数据操作
   }
 };
 </script>

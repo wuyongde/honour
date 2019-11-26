@@ -38,7 +38,7 @@ import VideosEdit from "./views/videos/VideosEdit";
 Vue.use(Router);
 
 export default new Router({
-  mode: "history",
+  mode: "hash",
   base: process.env.BASE_URL,
   routes: [
     {
@@ -67,7 +67,8 @@ export default new Router({
         {
           path: "/categories/edit/:_id",
           name: "categoriesEdit",
-          component: CategoriesEdit
+          component: CategoriesEdit,
+          props:true
         },
         {
           path: "/categories/list",
@@ -83,7 +84,8 @@ export default new Router({
         {
           path: "/goods/edit/:_id",
           name: "goodsEdit",
-          component: GoodsEdit
+          component: GoodsEdit,
+          props:true
         },
         {
           path: "/goods/list",
@@ -99,7 +101,8 @@ export default new Router({
         {
           path: "/heros/edit/:_id",
           name: "herosEdit",
-          component: HerosEdit
+          component: HerosEdit,
+          props:true
         },
         {
           path: "/heros/list",
@@ -115,7 +118,8 @@ export default new Router({
         {
           path: "/articles/edit/:_id",
           name: "articlesEdit",
-          component: ArticlesEdit
+          component: ArticlesEdit,
+          props:true
         },
         {
           path: "/articles/list",
@@ -131,7 +135,8 @@ export default new Router({
         {
           path: "/adverts/edit/:_id",
           name: "advertsEdit",
-          component: AdvertsEdit
+          component: AdvertsEdit,
+          props:true
         },
         {
           path: "/adverts/list",
@@ -147,7 +152,8 @@ export default new Router({
         {
           path: "/adminUsers/edit/:_id",
           name: "adminUsersEdit",
-          component: AdminUsersEdit
+          component: AdminUsersEdit,
+          props:true        //props:true，表示path上的参数可映射到props；这样可避免组件上通过this.$route.params._id去获取数据--太麻烦！
         },
         {
           path: "/adminUsers/list",
@@ -163,7 +169,8 @@ export default new Router({
         {
           path: "/videos/edit/:_id",
           name: "videosEdit",
-          component: VideosEdit
+          component: VideosEdit,
+          props:true
         },
         {
           path: "/videos/list",

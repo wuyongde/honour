@@ -1,4 +1,4 @@
-// 数据模型--物品模块
+// 数据模型--广告模块
 const mongoose = require("../middleware/dbConn");
 
 

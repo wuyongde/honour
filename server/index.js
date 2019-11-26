@@ -8,11 +8,7 @@ const cors = require("cors");
 app.use(cors());
 
 // 处理post请求体
-let bodyParser = require("body-parser");
-// parse application/x-www-form-urlencoded
-app.use(bodyParser.urlencoded({ extended: false }));
-// parse application/json
-app.use(bodyParser.json());
+app.use(express.json()); //默认只能处理：application/json数据，对于application/x-www-form-urlencoded这种表单数据无法解析；其本质也是调用body-parser处理；
 
 // 开放静态资源
 app.use(
@@ -20,17 +16,10 @@ app.use(
   express.static(path.join(__dirname, "./uploads/"))
 );
 
-// 开放静态资源---admin
-app.use(
-  "/admin",
-  express.static(path.join(__dirname, "./public/admin"))
-);
-// 开放静态资源---web
-app.use(
-  "/",
-  express.static(path.join(__dirname, "./public/web"))
-);
-
+// 开放静态资源---admin(管理端前端页面)
+app.use("/admin", express.static(path.join(__dirname, "./public/admin")));
+// 开放静态资源---web(web移动前端页面)
+app.use("/", express.static(path.join(__dirname, "./public/web")));
 
 // 引入中间件---token校验
 const token_verify = require("./middleware/token_verify");
@@ -78,7 +67,6 @@ app.use("/admin/api/tokenVerify", token_verify(), tokenVerifyRouter);
 // 引入客户端web路由
 let webRouter = require("./routers/web/index");
 app.use("/web/api", webRouter);
-
 
 // 统一处理错误
 // app.use(async (err, req, res, next) => {

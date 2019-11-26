@@ -8,13 +8,18 @@
         </el-select>
       </el-form-item>
       <el-form-item label="名称">
-        <el-input placeholder="输入分类名称" v-model="category.name" @focus="isShowAlert=false" @keyup.native.enter="add"></el-input>
+        <el-input placeholder="输入分类名称" v-model.trim="category.name" @blur="isShowAlert=true"></el-input>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click.prevent="add">提交</el-button>
+        <el-button type="primary" @click.prevent="add" :disabled="formCheckFlag">提交</el-button>
       </el-form-item>
     </el-form>
-    <el-alert :title="alertMsg" type="error" show-icon v-show="isShowAlert"></el-alert>
+    <el-alert
+      :title="alertMsg"
+      type="error"
+      show-icon
+      v-show="formCheckFlag && isShowAlert"
+    ></el-alert>
   </div>
 </template>
 <script>
@@ -31,74 +36,61 @@ export default {
       alertMsg: ""
     };
   },
+  props: {
+    _id: String
+  },
+  computed: {
+    // 表单校验
+    formCheckFlag() {
+      // 定义正则
+      const regCategoryName = /^([a-zA-Z]|[\u4E00-\u9FA5]){2,16}$/;
+      // 取表单值
+      let { name } = this.category;
+      // 校验
+      if (!regCategoryName.test(name)) {
+        this.alertMsg = "分类名必须是2-16位的英文字母及汉字的组合";
+        return true;
+      }
+      return false;
+    }
+  },
   methods: {
     // 添加分类
-    add() {
-      // 判断分类名是否合法
+    async add() {
+      // 取表单数据
       let { name, parent } = this.category;
-      name = name.trim();
-      if (!name) {
-        this.alertMsg = "分类名称不合法";
-        this.isShowAlert = true;
-        return;
-      }
       // 判断是添加分类还是编辑分类
-      let { _id } = this.$route.params;
+      let { _id } = this;
       if (!_id) {
-        // 添加分类---发送ajax请求
-        this.$http
-          .post("/categories", { name, parent })
-          .then(res => {
-            // 添加成功
-            this.$message({
-              type: "success",
-              message: "分类添加成功！"
-            });
-            this.$router.push("/categories/list");
-          })
-          .catch(err => {
-            // 添加失败
-            this.alertMsg = `分类添加失败！${err}`;
-            this.isShowAlert = true;
-          });
+        // 添加
+        await this.$http.post("/categories", { name, parent }); //这里ajax出错的话会有统一的处理
+        //  路由跳转
+        this.$router.push("/categories/list");
       } else {
-        // 编辑分类---发送ajax请求
-        this.$http
-          .put("/categories", { _id, name,parent })
-          .then(res => {
-            // 修改成功
-            this.$message({
-              type: "success",
-              message: "分类修改成功！"
-            });
-            this.$router.push("/categories/list");
-          })
-          .catch(err => {
-            // 修改失败
-            this.alertMsg = `分类修改失败！${err}`;
-            this.isShowAlert = true;
-          });
+        // 修改
+        await this.$http.put("/categories", { _id, name, parent });
+        //  路由跳转
+        this.$router.push("/categories/list");
       }
     },
     // 根据_id请求分类
     async getCategoryById() {
       // 判断_id是否存在
-      let _id = this.$route.params._id;
-      if (!_id) {
+      if (!this._id) {
         return;
       }
-      let res = await this.$http.get(`/categories?_id=${_id}`);
-      this.category = res.data.data;
+      let res = await this.$http.get(`/categories?_id=${this._id}`);
+      this.category = res.data.data.result;
     },
     // 获取所有父级分类
     async getParents() {
       let res = await this.$http.get(`/categories`);
-      this.parents = res.data.data;
+      this.parents = res.data.data.result;
     }
   },
   created() {
     this.getParents();
-    this.getCategoryById();
+    this._id && this.getCategoryById();
   }
 };
 </script>

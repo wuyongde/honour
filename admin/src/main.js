@@ -26,7 +26,54 @@ Vue.mixin({
       return { Authorization: localStorage.getItem("token") };
     }
   },
-  methods: {}
+  methods: {
+    // 图标或头像上传前的handler
+    beforeAvatarUpload(file) {
+      const isFileTypeOk = /^image\/(jpeg|jpg|png)$/i.test(file.type);
+      const isFileSizeOk = file.size / 1024 < 100;
+
+      if (!isFileTypeOk) {
+        this.$message.error("上传头像或图标只能是 jpeg|jpg|png 格式!");
+      }
+      if (!isFileSizeOk) {
+        this.$message.error("上传头像或图标大小不能超过 100KB!");
+      }
+      return isFileTypeOk && isFileSizeOk;
+    },
+    // 背景图或一般图片上传前的handler
+    beforeImageUpload(file) {
+      const isFileTypeOk = /^image\/(jpeg|jpg|png)$/i.test(file.type);
+      const isFileSizeOk = file.size / 1024 / 1024 < 2;
+
+      if (!isFileTypeOk) {
+        this.$message.error("上传图片只能是 jpeg|jpg|png 格式!");
+      }
+      if (!isFileSizeOk) {
+        this.$message.error("上传图片大小不能超过 2MB!");
+      }
+      return isFileTypeOk && isFileSizeOk;
+    },
+    // 视频上传前的handler
+    beforeVideoUpload(file) {
+      const isFileTypeOk = /^video\/mp4$/i.test(file.type);
+      const isFileSizeOk = file.size / 1024 / 1024 < 20;
+
+      if (!isFileTypeOk) {
+        this.$message.error("上传视频只能是 mp4 格式!");
+      }
+      if (!isFileSizeOk) {
+        this.$message.error("上传视频大小不能超过 20MB!");
+      }
+      return isFileTypeOk && isFileSizeOk;
+    },
+    // 文件上传失败的handler
+    errorUpload(err) {
+      this.$message({
+        type: "error",
+        message: `文件上传失败，请重新上传 (错误代码：${err.status})`
+      });
+    }
+  }
 });
 
 // 创建Vue根实例

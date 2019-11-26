@@ -1,4 +1,4 @@
-// 物品相关路由
+// 广告位相关路由
 const express = require("express");
 const router = express.Router();
 
@@ -6,72 +6,94 @@ const router = express.Router();
 let advertsModel = require("../../models/advertsModel");
 
 
-// 添加物品
+// 添加广告位
 router.post("/", async (req, res) => {
   let { name, items } = req.body;
   let result;
+  // 操作数据库
   try {
     result = await advertsModel.create({ name, items } );
   } catch (error) {
-    return res.json({
-      code: -1,
-      msg: "添加失败",
-      error: error
-    });
+    return res.status(500).json({
+      err:'添加失败：服务器错误'
+    })
   }
-  res.json({
-    code: 0,
-    msg: "添加成功",
-    data: result
-  });
+  // 响应
+  res.status(201).json({
+    msg:'添加成功',
+    data:{
+      result
+    }
+  })
 });
 
-// 查询物品
+// 查询广告位
 router.get("/", async (req, res) => {
-  // 判断：是查询所有还是查询某一个物品
+  // 判断：是查询所有还是查询某一个广告位
   let { _id } = req.query;
   let result;
   if (!_id) {
     //查询所有
-    result = await advertsModel.find(); //
+    try {
+      result = await advertsModel.find(); 
+    } catch (error) {
+      return res.status(500).json({
+        err:'查询失败：服务器错误'
+      })
+    }
   } else {
-    //查询某一物品
-    result = await advertsModel.findById(_id);
+    //查询某一广告位 
+    try {
+      result = await advertsModel.findById(_id);
+    } catch (error) {
+      return res.status(500).json({
+        err:'查询失败：服务器错误'
+      })
+    }
   }
   // 响应
-  res.json({
-    code: 0,
-    msg: "查询成功",
-    data: result
-  });
+  res.status(200).json({
+    data:{
+      result
+    }
+  })
 });
 
-// 修改物品
+// 修改广告位
 router.put("/", async (req, res) => {
   let { _id, name, items } = req.body;
-  let result = await advertsModel.findByIdAndUpdate(_id, { name, items });
+  // 操作数据库
+  let result
+   try {
+    result = await advertsModel.findByIdAndUpdate(_id, { name, items });
+   } catch (error) {
+     return res.status(500).json({
+       err:'修改失败：服务器错误'
+     })
+   }
   // 响应
-  res.json({
-    code: 0,
-    msg: "修改成功",
-    data: result
-  });
+  res.status(200).json({
+    msg:'修改成功',
+    data:{
+      result
+    }
+  })
 });
 
-// 删除物品
+// 删除广告位
 router.delete("/", async (req, res) => {
   let { _id } = req.query;
-  let result = await advertsModel.findByIdAndRemove(_id);
+  // 操作数据库
+  let result
+   try {
+    result = await advertsModel.findByIdAndRemove(_id);
+   } catch (error) {
+     return res.status(500).json({
+       err:'删除失败：服务器错误'
+     })
+   }
   // 响应
-  res.json({
-    code: 0,
-    msg: "删除成功",
-    data: result
-  });
+  res.status(204).end()
 });
-
-// 图片上传
-
-
 
 module.exports = router;

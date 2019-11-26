@@ -28,9 +28,9 @@ export default {
     };
   },
   methods: {
-    async getadminUsers() {
+    async getAdminUsers() {
       let res = await this.$http.get("/adminUsers");
-      this.adminUsers = res.data.data;
+      this.adminUsers = res.data.data.result;
     },
     del(row) {
       // 弹框确认是否删除
@@ -42,15 +42,8 @@ export default {
         .then(async () => {
           // 确认要删除，发ajax请求
           let res = await this.$http.delete(`/adminUsers?_id=${row._id}`);
-          if (res.data.code === 0) {
-            //删除成功
-            this.$message({
-              type: "success",
-              message: "删除成功!"
-            });
-            // 重新获取数据，刷新页面
-            this.getadminUsers();
-          }
+          // 重新获取数据，刷新页面
+          this.getAdminUsers();
         })
         .catch(() => {
           // 点击了取消按钮
@@ -62,7 +55,7 @@ export default {
     }
   },
   created() {
-    this.getadminUsers();
+    this.getAdminUsers();
   }
 };
 </script>

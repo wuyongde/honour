@@ -1,4 +1,4 @@
-// 数据模型--物品模块
+// 数据模型--文章模块
 const mongoose = require("../middleware/dbConn");
 
 //创建schema

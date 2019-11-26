@@ -29,7 +29,7 @@ export default {
   methods: {
     async getarticles() {
       let res = await this.$http.get("/articles");
-      this.articles = res.data.data;
+      this.articles = res.data.data.result;
     },
     del(row) {
       // 弹框确认是否删除
@@ -40,16 +40,9 @@ export default {
       })
         .then(async () => {
           // 确认要删除，发ajax请求
-          let res = await this.$http.delete(`/articles?_id=${row._id}`);
-          if (res.data.code === 0) {
-            //删除成功
-            this.$message({
-              type: "success",
-              message: "删除成功!"
-            });
-            // 重新获取数据，刷新页面
-            this.getarticles();
-          }
+          await this.$http.delete(`/articles?_id=${row._id}`);
+          // 重新获取数据，刷新页面
+          this.getarticles();
         })
         .catch(() => {
           // 点击了取消按钮

@@ -6,33 +6,51 @@
         <el-input placeholder="输入广告位名称" v-model="advert.name" @focus="isShowAlert=false"></el-input>
       </el-form-item>
 
-    <!-- 添加广告项 -->
-     <el-button size="small" type="primary" icon="el-icon-plus" plain @click.prevent="advert.items.push({img_url:'',link_url:'',title:''})">添加广告</el-button>
-          <div class="skills-box">
-            <div class="item" v-for="(item, index) in advert.items" :key="index">
-              <el-form-item label="广告标题">
-                <el-input placeholder="输入广告标题" v-model="item.title" @focus="isShowAlert=false"></el-input>
-              </el-form-item>
-              <el-form-item label="广告图片">
-                 <el-upload
+      <!-- 添加广告项 -->
+      <el-button
+        size="small"
+        type="primary"
+        icon="el-icon-plus"
+        plain
+        @click.prevent="advert.items.push({img_url:'',link_url:'',title:''})"
+      >添加广告</el-button>
+      <div class="skills-box">
+        <div class="item" v-for="(item, index) in advert.items" :key="index">
+          <el-form-item label="广告标题">
+            <el-input placeholder="输入广告标题" v-model="item.title" @focus="isShowAlert=false"></el-input>
+          </el-form-item>
+          <el-form-item label="广告图片">
+            <el-upload
               class="avatar-uploader"
               :action="fileUploadAction"
               :headers="addHeaders"
               :show-file-list="false"
-              :on-success="res=>item.img_url=res.imgUrl"
+              :on-success="res=>item.img_url=res.data.result.imgUrl"
+              :before-upload="beforeImageUpload"
             >
               <img v-if="item.img_url" :src="item.img_url" class="avatar" />
               <i v-else class="el-icon-plus avatar-uploader-icon"></i>
             </el-upload>
-              </el-form-item>
-              <el-form-item label="广告链接">
-                <el-input placeholder="输入广告链接" type="text" v-model="item.link_url" @focus="isShowAlert=false"></el-input>
-              </el-form-item>             
-             <el-form-item>
-                <el-button size="small" type="danger" icon="el-icon-delete" plain @click.prevent="advert.items.splice(index,1)">删除</el-button>
-             </el-form-item>
-            </div>
-          </div>
+          </el-form-item>
+          <el-form-item label="广告链接">
+            <el-input
+              placeholder="输入广告链接"
+              type="text"
+              v-model="item.link_url"
+              @focus="isShowAlert=false"
+            ></el-input>
+          </el-form-item>
+          <el-form-item>
+            <el-button
+              size="small"
+              type="danger"
+              icon="el-icon-delete"
+              plain
+              @click.prevent="advert.items.splice(index,1)"
+            >删除</el-button>
+          </el-form-item>
+        </div>
+      </div>
 
       <el-form-item style="margin-top:20px;">
         <el-button type="primary" @click.prevent="add">提交</el-button>
@@ -55,64 +73,38 @@ export default {
       alertMsg: ""
     };
   },
+  props: {
+    _id: String
+  },
   methods: {
     // 添加广告位
-    add() {
+    async add() {
       // 判断广告位名是否合法
       let { name, items } = this.advert;
       name = name.trim();
-      if (!name) {
-        this.alertMsg = "广告位名称不合法";
-        this.isShowAlert = true;
-        return;
-      }
       // 判断是添加广告位还是编辑广告位
-      let { _id } = this.$route.params;
+      let { _id } = this;
       if (!_id) {
         // 添加广告位---发送ajax请求
-        this.$http
-          .post("/adverts", { name, items })
-          .then(res => {
-            // 添加成功
-            this.$message({
-              type: "success",
-              message: "广告位添加成功！"
-            });
-            this.$router.push("/adverts/list");
-          })
-          .catch(err => {
-            // 添加失败
-            this.alertMsg = `广告位添加失败！${err}`;
-            this.isShowAlert = true;
-          });
+        await this.$http.post("/adverts", { name, items });
+        // 跳转
+        this.$router.push("/adverts/list");
       } else {
         // 编辑广告位---发送ajax请求
-        this.$http
-          .put("/adverts", { _id, name, items })
-          .then(res => {
-            // 修改成功
-            this.$message({
-              type: "success",
-              message: "广告位修改成功！"
-            });
-            this.$router.push("/adverts/list");
-          })
-          .catch(err => {
-            // 修改失败
-            this.alertMsg = `广告位修改失败！${err}`;
-            this.isShowAlert = true;
-          });
+        await this.$http.put("/adverts", { _id, name, items });
+        // 跳转
+        this.$router.push("/adverts/list");
       }
     },
     // 根据_id请求广告位
     async getadvertById() {
-      let _id = this.$route.params._id;
-      let res = await this.$http.get(`/adverts?_id=${_id}`);
-      this.advert = res.data.data;
+      let res = await this.$http.get(`/adverts?_id=${this._id}`);
+      this.advert = res.data.data.result;
     }
   },
-  created() {     //在组件的created阶段
-   this.$route.params._id && this.getadvertById();     //当路径参数中有_id时，才执行获取数据操作
+  created() {
+    //在组件的created阶段
+    this._id && this.getadvertById(); //当路径参数中有_id时，才执行获取数据操作
   }
 };
 </script>

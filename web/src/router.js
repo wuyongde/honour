@@ -10,7 +10,7 @@ import HeroDetail from "./views/Hero/HeroDetail";
 Vue.use(Router);
 
 export default new Router({
-  mode: "history",
+  mode: "hash",
   base: process.env.BASE_URL,
   routes: [
     {

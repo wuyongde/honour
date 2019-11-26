@@ -23,27 +23,26 @@ Vue.component("my-card-item", CardItem);
 
 // 引入axios并创建实例，并让Vue使用
 import axios from "axios";
+import { baseURL } from "./plugins/config";
 let http = axios.create({
-  baseURL:process.env.VUE_APP_API_URL || '/web/api'
-  // baseURL: "http://localhost:3000/web/api",
-  // baseURL: "http://192.168.1.3:3000/admin/api",
+  baseURL: baseURL
 });
 Vue.prototype.$http = http;
 
+// 引入自定义工具
+import "./plugins/tools";
 
 // 定义全局过滤器
-import dayjs from 'dayjs'
-Vue.filter('formatDate',(v,formatStr)=>{
-  switch (formatStr){
-    case 'MM-DD':
-      return dayjs(v).format('MM-DD')
-      break
+import dayjs from "dayjs";
+Vue.filter("formatDate", (v, formatStr) => {
+  switch (formatStr) {
+    case "MM-DD":
+      return dayjs(v).format("MM-DD");
+      break;
     default:
-        return dayjs(v).format('YYYY/MM/DD')
+      return dayjs(v).format("YYYY/MM/DD");
   }
-  
-})
-
+});
 
 Vue.config.productionTip = false;
 

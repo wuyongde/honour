@@ -62,61 +62,6 @@ router.get("/news/init", async (req, res) => {
 
   res.send(articles);
 });
-
-// web端获取新闻资讯数据
-router.get("/news", async (req, res) => {
-  // 主要难点是组织客户端需要的数据。。。
-  const parent = await categoriesModel.findOne({
-    name: "新闻分类"
-  });
-  const cats = await categoriesModel.aggregate([
-    { $match: { parent: parent._id } },
-    {
-      $lookup: {
-        from: "articles",
-        localField: "_id",
-        foreignField: "categories",
-        as: "newsList"
-      }
-    },
-    {
-      $addFields: {
-        newsList: { $slice: ["$newsList", 5] }
-      }
-    }
-  ]);
-  const subCats = cats.map(v => v._id);
-  cats.unshift({
-    name: "热门",
-    newsList: await articlesModel
-      .find()
-      .where({
-        categories: { $in: subCats }
-      })
-      .populate("categories")
-      .limit(5)
-      .lean()
-  });
-
-  cats.map(cat => {
-    cat.newsList.map(news => {
-      news.categoryName =
-        cat.name === "热门" ? news.categories[0].name : cat.name;
-      return news;
-    });
-    return cat;
-  });
-  res.send(cats);
-});
-
-// web端获取首页顶部轮播图数据
-router.get('/top_ads',async (req,res)=>{
-  // 查数据库
-  let result = await advertsModel.findOne({name:'首页顶部轮播图'})
-  // 响应数据
-  res.send(result.items)
-})
-
 // 英雄数据初始化--
 router.get("/heros/init", async (req, res) => {
   // 原始数据
@@ -841,6 +786,62 @@ router.get("/heros/init", async (req, res) => {
   res.send(heros1);
 });
 
+
+
+// web端获取新闻资讯数据
+router.get("/news", async (req, res) => {
+  // 主要难点是组织客户端需要的数据。。。
+  const parent = await categoriesModel.findOne({
+    name: "新闻分类"
+  });
+  const cats = await categoriesModel.aggregate([
+    { $match: { parent: parent._id } },
+    {
+      $lookup: {
+        from: "articles",
+        localField: "_id",
+        foreignField: "categories",
+        as: "newsList"
+      }
+    },
+    {
+      $addFields: {
+        newsList: { $slice: ["$newsList", 5] }
+      }
+    }
+  ]);
+  const subCats = cats.map(v => v._id);
+  cats.unshift({
+    name: "热门",
+    newsList: await articlesModel
+      .find()
+      .where({
+        categories: { $in: subCats }
+      })
+      .populate("categories")
+      .limit(5)
+      .lean()
+  });
+
+  cats.map(cat => {
+    cat.newsList.map(news => {
+      news.categoryName =
+        cat.name === "热门" ? news.categories[0].name : cat.name;
+      return news;
+    });
+    return cat;
+  });
+  res.send(cats);
+});
+
+// web端获取首页顶部轮播图数据
+router.get('/top_ads',async (req,res)=>{
+  // 查数据库
+  let result = await advertsModel.findOne({name:'首页顶部轮播图'})
+  // 响应数据
+  res.send(result.items)
+})
+
 // web端获取英雄列表数据
 router.get("/heros", async (req, res) => {
   // 主要难点是组织客户端需要的数据。。。
@@ -930,7 +931,6 @@ router.get('/videos',async (req,res)=>{
 // 视频播放次数增加
 router.patch('/videos',async (req,res)=>{
   let {_id,playSort} = req.body
-  console.log(req.body)
   // 写数据库
   const result = await videosModel.findByIdAndUpdate(_id,{playSort})
   res.send({
@@ -938,8 +938,6 @@ router.patch('/videos',async (req,res)=>{
     msg:'修改成功'
   })
 })
-
-
 
 
 module.exports = router;
