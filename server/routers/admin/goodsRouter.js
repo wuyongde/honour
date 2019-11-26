@@ -34,22 +34,34 @@ router.post("/", async (req, res) => {
 
 // 查询物品
 router.get("/", async (req, res) => {
-  // 判断：是查询所有还是查询某一个物品
-  let { _id } = req.query;
+  // 判断：查询类型
+  let { _id, pageSize, currPage } = req.query;
   let result;
-  if (!_id) {
-    //查询所有
+  if (_id) {
+    //查询某一英雄
     try {
-      result = await goodsModel.find();
+      result = await goodsModel.findById(_id);
+    } catch (error) {
+      return res.status(500).json({
+        err: "查询失败：服务器错误"
+      });
+    }
+  } else if (pageSize && currPage) {
+    // 分页查询
+    try {
+      result = await goodsModel
+        .find({})
+        .skip(pageSize * (currPage - 1))
+        .limit(pageSize * 1); //不能直接写pageSize（会报错），pageSize * 1则会是个数字。
     } catch (error) {
       return res.status(500).json({
         err: "查询失败：服务器错误"
       });
     }
   } else {
-    //查询某一物品
+    //查询总记录数
     try {
-      result = await goodsModel.findById(_id);
+      result = await goodsModel.find().count();
     } catch (error) {
       return res.status(500).json({
         err: "查询失败：服务器错误"

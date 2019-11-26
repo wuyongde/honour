@@ -52,19 +52,10 @@ router.post("/", async (req, res) => {
 
 // 查询英雄
 router.get("/", async (req, res) => {
-  // 判断：是查询所有还是查询某一个英雄
-  let { _id } = req.query;
+  // 判断：查询类型
+  let { _id, pageSize, currPage } = req.query;
   let result;
-  if (!_id) {
-    //查询所有
-    try {
-      result = await herosModel.find();
-    } catch (error) {
-      return res.status(500).json({
-        err: "查询失败：服务器错误"
-      });
-    }
-  } else {
+  if (_id) {
     //查询某一英雄
     try {
       result = await herosModel.findById(_id);
@@ -73,13 +64,34 @@ router.get("/", async (req, res) => {
         err: "查询失败：服务器错误"
       });
     }
+  } else if (pageSize && currPage) {
+    // 分页查询
+    try {
+      result = await herosModel
+        .find({})
+        .skip(pageSize * (currPage - 1))
+        .limit(pageSize * 1); //不能直接写pageSize（会报错），pageSize * 1则会是个数字。
+    } catch (error) {
+      return res.status(500).json({
+        err: "查询失败：服务器错误"
+      });
+    }
+  } else {
+    //查询总记录数
+    try {
+      result = await herosModel.find().count();
+    } catch (error) {
+      return res.status(500).json({
+        err: "查询失败：服务器错误"
+      });
+    }
   }
   // 响应
- res.status(200).json({
-   data:{
-     result
-   }
- })
+  res.status(200).json({
+    data: {
+      result
+    }
+  });
 });
 
 // 修改英雄
@@ -98,7 +110,7 @@ router.put("/", async (req, res) => {
     team_skills,
     bg_img
   } = req.body;
-  let result
+  let result;
   try {
     result = await herosModel.findByIdAndUpdate(_id, {
       name,
@@ -115,43 +127,43 @@ router.put("/", async (req, res) => {
     });
   } catch (error) {
     return res.status(500).json({
-      err:'修改失败：服务器错误'
-    })
+      err: "修改失败：服务器错误"
+    });
   }
   // 响应
   res.status(200).json({
-    msg:'修改成功',
-    data:{
+    msg: "修改成功",
+    data: {
       result
     }
-  })
+  });
 });
 
 // 删除英雄
 router.delete("/", async (req, res) => {
   let { _id } = req.query;
   // 检查参数是否上传
-  if(!_id){
+  if (!_id) {
     return res.status(400).json({
-      err:'参数不正确'
-    })
+      err: "参数不正确"
+    });
   }
   // 操作数据库
-  let result
-   try {
+  let result;
+  try {
     result = await herosModel.findByIdAndRemove(_id);
-   } catch (error) {
-     return res.status(500).json({
-       err:'删除失败：服务器错误'
-     })
-   }
+  } catch (error) {
+    return res.status(500).json({
+      err: "删除失败：服务器错误"
+    });
+  }
   // 响应
   res.status(204).json({
-    msg:'删除成功',
-    data:{
+    msg: "删除成功",
+    data: {
       result
     }
-  })
+  });
 });
 
 // 图片上传

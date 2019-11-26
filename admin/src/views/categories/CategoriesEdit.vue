@@ -84,7 +84,7 @@ export default {
     },
     // 获取所有父级分类
     async getParents() {
-      let res = await this.$http.get(`/categories`);
+      let res = await this.$http.get(`/categories?all=1`);
       this.parents = res.data.data.result;
     }
   },

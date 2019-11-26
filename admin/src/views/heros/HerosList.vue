@@ -2,6 +2,7 @@
   <div class="HerosList">
     <h1>英雄列表</h1>
     <el-table :data="heros" style="width: 100%" stripe fit>
+      <el-table-column type="index" :index="fnIndex" label="序号" style="width:100px;"></el-table-column>
       <el-table-column prop="_id" label="_id" style="width:220px;"></el-table-column>
       <el-table-column label="头像">
         <template slot-scope="scope">
@@ -20,21 +21,49 @@
         </template>
       </el-table-column>
     </el-table>
+    <!-- 分页显示 -->
+    <MyPagination
+      :changeDatas="changeDatas"
+      :changeTotal="changeTotal"
+      :changeCurrPage="changeCurrPage"
+      :pageSize="pageSize"
+      ref="pagination"
+      :apiName="apiName"
+    ></MyPagination>
   </div>
 </template>
 <script>
+import MyPagination from "../../components/MyPagination.vue";
 export default {
   name: "HerosList",
   data() {
     return {
-      heros: []
+      heros: [],
+      total: 0,
+      pageSize: 8,
+      currPage: 1,
+      apiName: "heros"
     };
   },
+  components: {
+    MyPagination
+  },
   methods: {
-    async getheros() {
-      let res = await this.$http.get("/heros");
-      this.heros = res.data.data.result;
+    fnIndex(index) {
+      let { pageSize, currPage } = this;
+      return 1 + (currPage - 1) * pageSize + index;
     },
+    
+    changeDatas(datas) {
+      this.heros = datas;
+    },
+    changeTotal(total) {
+      this.total = total;
+    },
+    changeCurrPage(currPage) {
+      this.currPage = currPage;
+    },
+
     del(row) {
       // 弹框确认是否删除
       this.$confirm(`是否真的删除："${row.name}" `, "提示", {
@@ -46,7 +75,7 @@ export default {
           // 确认要删除，发ajax请求
           await this.$http.delete(`/heros?_id=${row._id}`);
           // 重新获取数据，刷新页面
-          this.getheros();
+          this.$refs.pagination.currPageChange(this.currPage);
         })
         .catch(() => {
           // 点击了取消按钮
@@ -56,9 +85,6 @@ export default {
           });
         });
     }
-  },
-  created() {
-    this.getheros();
   }
 };
 </script>

@@ -2,6 +2,7 @@
   <div class="VideosList">
     <h1>视频列表</h1>
     <el-table :data="videos" style="width: 100%" stripe fit>
+      <el-table-column type="index" :index="fnIndex" label="序号" style="width:100px;"></el-table-column>
       <el-table-column prop="_id" label="_id" style="width:220px;"></el-table-column>
       <el-table-column prop="category.name" label="视频分类"></el-table-column>
       <el-table-column prop="title" label="标题"></el-table-column>
@@ -18,25 +19,56 @@
         </template>
       </el-table-column>
     </el-table>
+    <!-- 分页显示 -->
+    <MyPagination
+      :changeDatas="changeDatas"
+      :changeTotal="changeTotal"
+      :changeCurrPage="changeCurrPage"
+      :pageSize="pageSize"
+      ref="pagination"
+      :apiName="apiName"
+    ></MyPagination>
   </div>
 </template>
 <script>
+import MyPagination from "../../components/MyPagination.vue";
 import dayjs from "dayjs";
 export default {
   name: "VideosList",
   data() {
     return {
-      videos: []
+      videos: [],
+      total: 0,
+      pageSize: 8,
+      currPage: 1,
+      apiName: "videos"
     };
   },
-  methods: {
-    async getvideos() {
-      let res = await this.$http.get("/videos");
-      this.videos = res.data.data.result;
+  components: {
+    MyPagination
+  },
+  watch: {
+    "videos"() {
       this.videos.map(video => {
         video.createdAt = dayjs(video.createdAt).format("YYYY-MM-DD");
       });
+    }
+  },
+  methods: {
+    fnIndex(index) {
+      let { pageSize, currPage } = this;
+      return 1 + (currPage - 1) * pageSize + index;
     },
+    changeDatas(datas) {
+      this.videos = datas;
+    },
+    changeTotal(total) {
+      this.total = total;
+    },
+    changeCurrPage(currPage) {
+      this.currPage = currPage;
+    },
+
     del(row) {
       // 弹框确认是否删除
       this.$confirm(`是否真的删除："${row.title}" `, "提示", {
@@ -48,7 +80,7 @@ export default {
           // 确认要删除，发ajax请求
           await this.$http.delete(`/videos?_id=${row._id}`);
           // 重新获取数据，刷新页面
-          this.getvideos();
+          this.$refs.pagination.currPageChange(this.currPage);
         })
         .catch(() => {
           // 点击了取消按钮
@@ -58,9 +90,6 @@ export default {
           });
         });
     }
-  },
-  created() {
-    this.getvideos();
   }
 };
 </script>

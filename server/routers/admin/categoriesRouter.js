@@ -33,13 +33,14 @@ router.post("/", async (req, res) => {
   });
 });
 
+
 // 查询分类
 router.get("/", async (req, res) => {
-  // 判断：是查询所有还是查询某一个分类
-  let { _id, parent } = req.query;
+  // 判断：查询类型
+  let { _id, parent,pageSize, currPage,all } = req.query;
   let result;
   if (_id) {
-    //查询某一分类
+    //查询某一个
     try {
       result = await categoriesModel.findById(_id);
     } catch (error) {
@@ -47,8 +48,20 @@ router.get("/", async (req, res) => {
         err: "查询失败：服务器错误"
       });
     }
-  }
-  if (parent) {
+  } else if (pageSize && currPage) {
+    // 分页查询
+    try {
+      result = await categoriesModel
+        .find({})
+        .populate('parent')
+        .skip(pageSize * (currPage - 1))
+        .limit(pageSize * 1); //不能直接写pageSize（会报错），pageSize * 1则会是个数字。
+    } catch (error) {
+      return res.status(500).json({
+        err: "查询失败：服务器错误"
+      });
+    }
+  } else if(parent){
     //查询某一父类下面的子分类
     try {
       result = await categoriesModel.find({ parent: parent });
@@ -57,11 +70,19 @@ router.get("/", async (req, res) => {
         err: "查询失败：服务器错误"
       });
     }
-  }
-  if (!_id && !parent) {
-    //查询所有
+  }else if(all){
+    // 查询所有分类
     try {
-      result = await categoriesModel.find().populate("parent"); //populate表示把某个字段关联的数据提取过来！！
+      result = await categoriesModel.find();
+    } catch (error) {
+      return res.status(500).json({
+        err: "查询失败：服务器错误"
+      });
+    }
+  }else{
+     //查询总记录数
+     try {
+      result = await categoriesModel.find().count();
     } catch (error) {
       return res.status(500).json({
         err: "查询失败：服务器错误"
@@ -80,7 +101,7 @@ router.get("/", async (req, res) => {
 router.put("/", async (req, res) => {
   let { _id, name, parent } = req.body;
   // 检查参数是否上传
-  if (!_id || !name || !parent) {
+  if (!_id || !name) {
     return res.status(400).json({
       err: "参数不正确"
     });

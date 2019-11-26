@@ -6,9 +6,9 @@
 
       <el-table-column prop="username" label="用户名"></el-table-column>
       <el-table-column fixed="right" label="操作" width="200">
-        <template slot-scope="scope" v-if="scope.row.username !== 'admin'">
+        <template slot-scope="scope" v-if="showOpt(scope.row.username)">
           <el-button
-            :disabled="scope.row.username === 'admin'"
+            :disabled="scope.row.username === 'admin' || scope.row.username === 'demo'"
             type="primary"
             size="small"
             @click="$router.push(`/adminUsers/edit/${scope.row._id}`)"
@@ -27,7 +27,17 @@ export default {
       adminUsers: []
     };
   },
+  computed: {
+    
+  },
   methods: {
+    //  admin与demo用户不能修改
+    showOpt(username){
+      if(username === 'admin' || username === 'demo'){
+        return false
+      }
+      return true
+    },
     async getAdminUsers() {
       let res = await this.$http.get("/adminUsers");
       this.adminUsers = res.data.data.result;
