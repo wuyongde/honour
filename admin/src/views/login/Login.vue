@@ -1,17 +1,16 @@
 <template>
   <div class="Login">
     <el-container>
-      <el-form label-width="80px">
-        <el-form-item label="用户名">
+      <el-form label-width="80px" :rules="form_login" :model="model" ref="form_login">
+        <el-form-item label="用户名" prop="username">
           <el-input
             v-model="model.username"
             placeholder="请输入用户名"
-            autofocus
             clearable
             @keyup.native.enter="login"
           ></el-input>
         </el-form-item>
-        <el-form-item label="密码">
+        <el-form-item label="密码" prop="password">
           <el-input
             v-model="model.password"
             placeholder="请输入密码"
@@ -42,24 +41,40 @@ export default {
       model: {
         username: "",
         password: ""
+      },
+      form_login:{        //表单校验规则
+        username:[
+          {required:true,message:'用户名必须填写',trigger:'blur'},
+          { min: 3, max: 20, message: "用户名必须是3-15位之间", trigger: "blur" }
+        ],
+        password:[
+           {required:true,message:'密码必须填写',trigger:'blur'},
+          {min:4,max:20,message:'密码长度必须在4-20个字符之间',trigger:'blur'}
+        ]
       }
     };
   },
 
   methods: {
-    async login() {
-      //   用户登录
-      let res;
-      try {
-        res = await this.$http.post("/login", this.model);
-        localStorage.setItem("token", res.data.data.token); //把token存起来
-        localStorage.setItem("username", res.data.data.username); //把用户名存起来
-        //   登录成功后跳转
-        this.$router.push("/adminUsers/list");
-        
-      } catch (error) {
-        this.model.username = this.model.password = ""
-      }
+     login() {
+      // 测试表单校验是否全部通过
+      this.$refs.form_login.validate(async isValid=>{
+        // 只有当校验通过后，才发现ajax请求
+        if(isValid){
+          //   用户登录
+          let res;
+          try {
+            res = await this.$http.post("/login", this.model);
+            localStorage.setItem("token", res.data.data.token); //把token存起来
+            localStorage.setItem("username", res.data.data.username); //把用户名存起来
+            //   登录成功后跳转
+            this.$router.push("/adminUsers/list");
+            
+          } catch (error) {
+            this.model.username = this.model.password = ""
+          }
+        }
+      })  
     }
   }
 };

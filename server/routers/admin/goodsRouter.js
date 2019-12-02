@@ -35,7 +35,7 @@ router.post("/", async (req, res) => {
 // 查询物品
 router.get("/", async (req, res) => {
   // 判断：查询类型
-  let { _id, pageSize, currPage } = req.query;
+  let { _id, pageSize, currPage, all } = req.query;
   let result;
   if (_id) {
     //查询某一英雄
@@ -53,6 +53,15 @@ router.get("/", async (req, res) => {
         .find({})
         .skip(pageSize * (currPage - 1))
         .limit(pageSize * 1); //不能直接写pageSize（会报错），pageSize * 1则会是个数字。
+    } catch (error) {
+      return res.status(500).json({
+        err: "查询失败：服务器错误"
+      });
+    }
+  } else if (all) {
+    // 查询所有
+    try {
+      result = await goodsModel.find();
     } catch (error) {
       return res.status(500).json({
         err: "查询失败：服务器错误"

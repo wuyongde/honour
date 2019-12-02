@@ -53,7 +53,7 @@ router.post("/", async (req, res) => {
 // 查询英雄
 router.get("/", async (req, res) => {
   // 判断：查询类型
-  let { _id, pageSize, currPage } = req.query;
+  let { _id, pageSize, currPage,all } = req.query;
   let result;
   if (_id) {
     //查询某一英雄
@@ -76,7 +76,17 @@ router.get("/", async (req, res) => {
         err: "查询失败：服务器错误"
       });
     }
-  } else {
+  } else if(all){
+      // 查询所有记录
+      try {
+        result = await herosModel.find();
+      } catch (error) {
+        return res.status(500).json({
+          err: "查询失败：服务器错误"
+        });
+      }
+
+  }else{
     //查询总记录数
     try {
       result = await herosModel.find().count();

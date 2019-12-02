@@ -45,7 +45,7 @@
             >
               <span class="text-blue">[{{item.categoryName}}]</span>
               <span class="mx-1">|</span>
-              <span class="flex-1 eclips">{{item.title}}</span>
+              <a class="flex-1 eclips">{{item.title}}</a>
               <span class="ml-2 text-sm text-grey">{{item.createdAt | formatDate}}</span>
             </router-link>
           </ul>
@@ -76,7 +76,7 @@
     </my-card-item>
 
     <!-- videos -->
-     <my-card-item :contents="videos_contents" icon="videos" title="精彩视频" theme="videos">
+    <my-card-item :contents="videos_contents" icon="videos" title="精彩视频" theme="videos">
       <template #slide_item="newsProps">
         <!-- solot传递值 ，理解！！-->
         <swiper-slide v-for="(content, index) in newsProps.contents" :key="index">
@@ -89,8 +89,11 @@
               style="width:49%;"
               class="d-flex flex-column flex-ai-center"
             >
-              <img :src="video.imgUrl" alt style="width:100%;height:7.3077rem;" />             
-              <h3 class="text-sm text-dark-1 my-1" style="font-weight:400;height:2.7692rem;width:100%;overflow:hidden;">{{video.title}}</h3>
+              <img :src="video.imgUrl" alt style="width:100%;height:7.3077rem;" />
+              <h3
+                class="text-sm text-dark-1 my-1"
+                style="font-weight:400;height:2.7692rem;width:100%;overflow:hidden;"
+              >{{video.title}}</h3>
               <div class="d-flex flex-ai-center text-xs text-grey px-1" style="width:100%;">
                 <i class="sprites sprites-videos"></i>
                 <span class="flex-1 mx-1">{{video.playSort}}</span>
@@ -101,8 +104,6 @@
         </swiper-slide>
       </template>
     </my-card-item>
-
-
   </div>
 </template>
 <script>
@@ -131,7 +132,6 @@ export default {
       videos_contents: [],
       swiperOption_ad: {
         autoplay: true,
-        loop: true, // 循环模式选项
         speed: 500,
         // 如果需要分页器
         pagination: {
@@ -151,7 +151,7 @@ export default {
     this.fetch_news();
     this.fetch_heros();
     this.fetch_top_ads();
-    this.fetch_videos()
+    this.fetch_videos();
   },
   methods: {
     async fetch_news() {
@@ -162,7 +162,7 @@ export default {
       let result = await this.$http.get("/heros");
       this.heros_contents = result.data;
     },
-     async fetch_videos() {
+    async fetch_videos() {
       let result = await this.$http.get("/videos");
       this.videos_contents = result.data;
     },

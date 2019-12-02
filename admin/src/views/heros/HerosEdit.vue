@@ -278,7 +278,7 @@ export default {
     },
     // 获取所有装备
     async getGoods() {
-      let result = await this.$http.get("/goods");
+      let result = await this.$http.get(`/goods?all=1`);
       this.goods = result.data.data.result;
     }
   },

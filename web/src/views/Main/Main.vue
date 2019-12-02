@@ -11,24 +11,39 @@
         <div class="topNav pb-2 pt-3 bg-primary text-white">
             <div class="nav d-flex flex-jc-around">
                 <div class="navItem active">
-                    <router-link tag="span" to="/Home">首页</router-link>
+                    <router-link tag="span" to="/Home" >首页</router-link>
                 </div>
                 <div class="navItem">
-                    <router-link tag="span" to="">攻略中心</router-link>
+                    <router-link to="/Home" tag="span">攻略中心</router-link>
                 </div>
                 <div class="navItem">
-                    <router-link tag="span" to="">赛事中心</router-link>
+                    <router-link tag="span" to="/Home">赛事中心</router-link>
                 </div>
             </div>
         </div>
-        <router-view></router-view>
+
         <!-- Home区域 -->
+ 
+        <transition :name="$route.path==='/Home'?'home':''">
+        <router-view></router-view>
+        </transition>
+
     </div>
 </template>
 <script>
 
 export default {
-    name:'Main'
+    name:'Main',
+    data() {
+        return {
+            transName:''
+        }
+    },
+    methods: {
+        reloadHome(){
+            
+        }
+    },
 }
 </script>
 <style lang="scss" scoped>
@@ -47,4 +62,15 @@ export default {
             border-bottom: 3px solid #fff;
         }
     }
+
+// animation
+.home-enter{
+    margin-top: 100vh;
+}
+.home-enter-active{
+    transition: all 0.5s ease;
+}
+
+
+
 </style>
